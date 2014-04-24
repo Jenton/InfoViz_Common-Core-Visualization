@@ -1,0 +1,128 @@
+/* reset */
+
+html, body, address, blockquote, del, div, h1, h2, h3, h4, h5, h6, hr, ins, noscript, p, pre, dl, dt, dd, li, ol, ul, table, caption, colgroup, col, thead, tfoot, tbody, tr, td, th, form, button, fieldset, legend, label, select, optgroup, option, textarea, a, bdo, br, img, map, area, object, param, q, script, span, sub, sup, abbr, acronym, cite, code, del, dfn, em, ins, kbd, samp, strong, var, b, big, i, small, tt{border:0;font-family:inherit;font-size:100%;font-style:inherit;font-weight:inherit;margin:0;outline:0;padding:0;vertical-align:baseline;}
+ol, ul{list-style:none;}
+th{text-align:left;}
+table{border-collapse:collapse;}
+
+
+
+/* global */
+
+body 											      {background:#f0f0f0;}
+a:link,
+a:visited										    {}
+a:hover,
+a:visited:hover									{}
+
+table td										    {}
+
+h1												      {font-size:2em; font-weight:bold; margin:0 0 20px 0; text-align: center;}
+h2												      {}
+h3												      {}
+h4												      {}
+h5												      {}
+h6												      {}
+
+p												        {}
+span												    {}
+hr													    {}
+label												    {}
+input[type=text]								{}
+input[type=text]:focus				  {}
+input[type=submit]							{}
+textarea											  {}
+
+::selection                     {}
+::-moz-selection 								{}
+
+
+
+/* container */
+
+main												    {margin:40px auto; position:relative; width:800px;}
+
+#viz												    {background:#fff;}
+
+#viz rect											  {cursor:pointer; fill:#222;}
+#viz rect.fail									{fill:#ab2e2e;}
+
+#viz text											  {font-size:.75em; font-weight:bold;}
+
+#tests                          {margin:0 0 20px 0; overflow:auto;}
+#tests li                       {display:inline-block; margin:0 10px 0 0;}
+
+#score-popup										{color:#333; display:block; font-size:2em; font-weight:normal; left:0; height:20px; position:absolute; text-align:center; top:0; width:70px; z-index:100;}
+
+.update-data                    {color:#77b2db; font-size:.75em; font-weight:bold; text-decoration:none; text-transform:uppercase;}
+.selected                       {color:#000;}
+
+
+
+/* header */
+
+#header                         {}
+
+
+
+/* responsive design css rules */
+
+@media screen and (max-width:480px) {
+body 												    {}
+}
+
+@media screen and (min-width:480px) and (max-width:800px) {
+body                            {}
+}
+
+@media screen and (min-width:800px) and (max-width:1024px) {
+body                            {}
+}
+
+
+
+/* misc */
+
+strong											    {font-weight:bold;}
+em                              {font-style:italic;}
+.cb                             {clear:both;}  
+
+
+/* parallel coordinates - from http://bl.ocks.org/jasondavies/1341281 */
+
+svg {
+  font: 10px sans-serif;
+}
+
+.background path {
+  fill: none;
+  stroke: #ccc;
+  stroke-opacity: .4;
+  shape-rendering: crispEdges;
+}
+
+.foreground path {
+  fill: none;
+  stroke: #5CE62E;
+  stroke-opacity: .7;
+}
+
+.brush .extent {
+  fill-opacity: .3;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.axis line, .axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  text-shadow: 2px 2px 0 #fff;
+  cursor: move;
+  font-size: 14px;
+  font-weight: bold;
+
+}        
