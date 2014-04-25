@@ -128,7 +128,7 @@ function update(source) {
   });
 }
 
-// Toggle children.
+// Toggle children (if children visible, set a temp var equal to them and set the children variable to null to hide. else, do the the opposite)
 function toggle(d) {
   if (d.children) {
     d._children = d.children;
