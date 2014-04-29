@@ -1,5 +1,7 @@
 // Get JSON data
 
+    
+
 //treeJSON = d3.json("./_data/flare.json", function(error, treeData) {
 treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     // Calculate total nodes, max label length
@@ -18,11 +20,18 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     var root;
 
     // size of the diagram
-    var viewerWidth = $(document).width()-100;
-    var viewerHeight = $(document).height();
+    var viewerWidth = $(document).width()-50;
+    var viewerHeight = $(document).height()-100;
 
     var tree = d3.layout.tree()
         .size([viewerHeight, viewerWidth]);
+
+    // Jenton Edit: hover text div
+    $(function() {
+        $( "#standard-hover-div").
+        width(viewerWidth)
+        .height(viewerHeight - 100);
+    });
 
     // define a d3 diagonal projection for use by the node paths later on.
     var diagonal = d3.svg.diagonal()
@@ -321,8 +330,12 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
         scale = zoomListener.scale();
         x = -source.y0;
         y = -source.x0;
+        console.log("x: " + x);
+        console.log("y: " + y);
         x = x * scale + viewerWidth / 2;
         y = y * scale + viewerHeight / 2;
+        console.log("x: " + x);
+        console.log("y: " + y);
         d3.select('g').transition()
             .duration(duration)
             .attr("transform", "translate(" + x + "," + y + ")scale(" + scale + ")");
@@ -398,7 +411,9 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
             .attr("transform", function(d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";
             })
-            .on('click', click);
+            .on('click', click) //Jenton Edit: adding mouse over tooltip functionality
+            .on("mouseover", mouseover)
+            .on("mouseout", mouseout);
 
         nodeEnter.append("circle")
             .attr('class', 'nodeCircle')
@@ -430,7 +445,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
             .style("fill-opacity", 0);
 
         // phantom node to give us mouseover in a radius around it
-        nodeEnter.append("circle")
+        /*nodeEnter.append("circle")
             .attr('class', 'ghostCircle')
             .attr("r", 30)
             .attr("opacity", 0.2) // change this to zero to hide the target area
@@ -441,7 +456,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
             })
             .on("mouseout", function(node) {
                 outCircle(node);
-            });
+            });*/
 
         // Update the text to reflect whether node has children or not.
         // Jenton Edit: I changed the -10 : 10 ternary operator to -20 : 20 to make the text labels farther from the circles
@@ -556,45 +571,67 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     centerNode(root);
     //centerNode(root.child('.nodeCircle'));
 
-//Jenton Edit: trying to get a zoom slider working
-$(function() {
-    $( "#slider-vertical" ).slider({
-        orientation: "vertical",
-        range: "min",
-        min: 1000,
-        max: 10000,
-        value: 5000,
-        slide: function( event, ui ) {
-            zoomWithSlider(ui.value/5000);
-        }
-    }).height($(document).height()-25)
-    .css("float", "left");
+    //Jenton Edit: trying to get a zoom slider working
+    // source: http://computing.dcu.ie/~dganguly/d3sliderzoom.htm
+    $(function() {
+        $( "#slider-vertical" ).slider({
+            orientation: "vertical",
+            range: "min",
+            min: 1000,
+            max: 10000,
+            value: 5000,
+            slide: function( event, ui ) {
+                zoomWithSlider(ui.value/5000);
+            }
+        }).height(viewerHeight);
+    });
 
-    $("#tree-container").css("float", "left");
-});
+    function zoomed() {
+      container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    }
 
-function zoomed() {
-  container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-}
+    function zoomWithSlider(scale) {
+            var svg = d3.select("body").select("svg");
+            var container = svg.select("g");
+            console.log($(this));
+            //var container = svg.select($(this).nodeCircle);
+            var h = svg.attr("height"), w = svg.attr("width");
+            
+            // Note: works only on the <g> element and not on the <svg> element
+        // which is a common mistake
+            // container.attr("transform",
+            //         "translate(" + w/2 + ", " + h/2 + ") " +
+            //         "scale(" + scale + ") " +
+            //         "translate(" + (-w/2) + ", " + (-h/2) + ")");
+            //scale = zoomListener.scale();
+            container.attr("transform", "translate(" + x + "," + y + ")scale(" + scale + ")");
+            zoomListener.scale(scale);
+            zoomListener.translate([x,y]);
+    }
 
-function zoomWithSlider(scale) {
-        var svg = d3.select("body").select("svg");
-        var container = svg.select("g");
-        console.log($(this));
-        //var container = svg.select($(this).nodeCircle);
-        var h = svg.attr("height"), w = svg.attr("width");
+    // Jenton Edit: Show tooltip on mouseover : http://stackoverflow.com/questions/19297808/how-to-display-name-of-node-when-mouse-over-on-node-in-collapsible-tree-graph
+    function mouseover(d) {
         
-        // Note: works only on the <g> element and not on the <svg> element
-    // which is a common mistake
-        // container.attr("transform",
-        //         "translate(" + w/2 + ", " + h/2 + ") " +
-        //         "scale(" + scale + ") " +
-        //         "translate(" + (-w/2) + ", " + (-h/2) + ")");
-        //scale = zoomListener.scale();
-        container.attr("transform", "translate(" + x + "," + y + ")scale(" + scale + ")");
-        zoomListener.scale(scale);
-        zoomListener.translate([x,y]);
-}
+        /*d3.select(this).append("text") //this code is for hovering tooltips near the node
+            .attr("class", "hover")
+            .attr('transform', function(d){ 
+                return 'translate(10, -10)';
+            })
+            .text(d.name + ": " + d.id);*/
+        $(".hover-text").remove(); // clear the hover text div of any old content when mouse hovering
+        $("#standard-hover-div").append(function() {
+            if (d.standardText) { //if logic to only show text when standardText exists
+                return "<p class='hover-text'>Standard Code: " + d.name + "<br />Standard Text: " + d.standardText + "</p>"; // append an element to the hover text div
+           };
+        });
+    }
+
+    // Toggle children on click.
+    function mouseout(d) {
+        d3.select(this).select("text.hover").remove();
+        
+    }
+
 
 
 });

@@ -9,7 +9,7 @@ table{border-collapse:collapse;}
 
 /* global */
 
-body 											      {background:#f0f0f0;}
+body 											      {background:#fff;}
 a:link,
 a:visited										    {}
 a:hover,
@@ -127,7 +127,16 @@ svg {
 
 }        
 
-/*#tree-container {
+#tree-container {
   float: left;
-}*/
+}
+
+#slider-vertical {
+  float: left;
+}
+
+#standard-hover-div {
+background-color: #cbcbcb;
+float:left;
+}
 
