@@ -18,7 +18,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     var root;
 
     // size of the diagram
-    var viewerWidth = $(document).width();
+    var viewerWidth = $(document).width()-100;
     var viewerHeight = $(document).height();
 
     var tree = d3.layout.tree()
@@ -116,7 +116,8 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
     var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 
-    function initiateDrag(d, domNode) {
+    //disabling the drag function
+    /*function initiateDrag(d, domNode) {
         draggingNode = d;
         d3.select(domNode).select('.ghostCircle').attr('pointer-events', 'none');
         d3.selectAll('.ghostCircle').attr('class', 'ghostCircle show');
@@ -156,7 +157,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
         }).remove();
 
         dragStarted = null;
-    }
+    }*/
 
     // define the baseSvg, attaching a class for styling and the zoomListener
     var baseSvg = d3.select("#tree-container").append("svg")
@@ -166,7 +167,8 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
         .call(zoomListener);
 
 
-    // Define the drag listeners for drag/drop behaviour of nodes.
+    //disabling the drag function
+    /*// Define the drag listeners for drag/drop behaviour of nodes.
     dragListener = d3.behavior.drag()
         .on("dragstart", function(d) {
             if (d == root) {
@@ -256,7 +258,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
             centerNode(draggingNode);
             draggingNode = null;
         }
-    }
+    }*/
 
     // Helper functions for collapsing and expanding nodes.
 
@@ -367,7 +369,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
             }
         };
         childCount(0, root);
-        var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line
+        var newHeight = d3.max(levelWidth) * 38; // jenton edit: 50 pixels per line for the height spread (default was 25)
         tree = tree.size([newHeight, viewerWidth]);
 
         // Compute the new tree layout.
@@ -379,6 +381,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
             //d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
             // alternatively to keep a fixed scale one can set a fixed depth per level
             // Normalize for fixed-depth by commenting out below line
+            //Jenton Edit: enabled the line below to create a fixed scale
             d.y = (d.depth * 500); //500px per level.
         });
 
@@ -390,7 +393,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
 
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
-            .call(dragListener)
+            //.call(dragListener)
             .attr("class", "node")
             .attr("transform", function(d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";
@@ -404,14 +407,22 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
                 return d._children ? "lightsteelblue" : "#fff";
             });
 
+        // Jenton Edit: I changed the -10 : 10 ternary operator to -20 : 20 to make the text labels farther from the circles
+        // Jenton Edit: This code changes the placement of the text
         nodeEnter.append("text")
-            .attr("x", function(d) {
-                return d.children || d._children ? -10 : 10;
+            /*.attr("x", function(d) { // original
+                return d.children || d._children ? -20 : 20;
+            })*/ 
+            .attr("x", function(d) { // change the text on the end nodes so it shows up to the left of the end node
+                return d.children || d._children ? -20 : -20;
             })
             .attr("dy", ".35em")
             .attr('class', 'nodeText')
-            .attr("text-anchor", function(d) {
+            /*.attr("text-anchor", function(d) {
                 return d.children || d._children ? "end" : "start";
+            })*/
+            .attr("text-anchor", function(d) {
+                return d.children || d._children ? "end" : "end";
             })
             .text(function(d) {
                 return d.name;
@@ -433,20 +444,22 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
             });
 
         // Update the text to reflect whether node has children or not.
-        node.select('text')
+        // Jenton Edit: I changed the -10 : 10 ternary operator to -20 : 20 to make the text labels farther from the circles
+  /*      node.select('text')
             .attr("x", function(d) {
-                return d.children || d._children ? -10 : 10;
+                return d.children || d._children ? -20 : 20;
             })
             .attr("text-anchor", function(d) {
                 return d.children || d._children ? "end" : "start";
             })
             .text(function(d) {
                 return d.name;
-            });
+            });*/
 
         // Change the circle fill depending on whether it has children and is collapsed
+        // also where color is
         node.select("circle.nodeCircle")
-            .attr("r", 10)
+            .attr("r", 15)
             //.attr("r", 4.5)
             .style("fill", function(d) {
                 return d._children ? "lightsteelblue" : "#fff";
@@ -538,6 +551,52 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     });
 
     // Layout the tree initially and center on the root node.
+    // Jenton Reference: need to try to center the graph on the English/Math level on first load
     update(root);
     centerNode(root);
+    //centerNode(root.child('.nodeCircle'));
+
+//Jenton Edit: trying to get a zoom slider working
+$(function() {
+    $( "#slider-vertical" ).slider({
+        orientation: "vertical",
+        range: "min",
+        min: 1000,
+        max: 10000,
+        value: 5000,
+        slide: function( event, ui ) {
+            zoomWithSlider(ui.value/5000);
+        }
+    }).height($(document).height()-25)
+    .css("float", "left");
+
+    $("#tree-container").css("float", "left");
 });
+
+function zoomed() {
+  container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
+
+function zoomWithSlider(scale) {
+        var svg = d3.select("body").select("svg");
+        var container = svg.select("g");
+        console.log($(this));
+        //var container = svg.select($(this).nodeCircle);
+        var h = svg.attr("height"), w = svg.attr("width");
+        
+        // Note: works only on the <g> element and not on the <svg> element
+    // which is a common mistake
+        // container.attr("transform",
+        //         "translate(" + w/2 + ", " + h/2 + ") " +
+        //         "scale(" + scale + ") " +
+        //         "translate(" + (-w/2) + ", " + (-h/2) + ")");
+        //scale = zoomListener.scale();
+        container.attr("transform", "translate(" + x + "," + y + ")scale(" + scale + ")");
+        zoomListener.scale(scale);
+        zoomListener.translate([x,y]);
+}
+
+
+});
+
+
