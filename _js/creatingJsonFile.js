@@ -1,6 +1,6 @@
 
-//d3.tsv("./_data/CCSS_standards.tsv", function(data) {
-var newData = { name :"root", children : [] },
+d3.tsv("./_data/CCSS_standards.tsv", function(data) {
+var newData = { name :"Common Core Standards", children : [] },
     levels = ["subject","grade","domain","cluster"];
 
 //console.log(newData);
@@ -36,10 +36,11 @@ data.forEach(function(d){
 });
 
 //console.log(newData);
-
-root = newData;
-//-----
 //use stringify to get the object to text and create an offline json file
+textData = JSON.stringify(newData);
+console.log(textData);
+//-----
+
 //console.log(JSON.stringify(newData, null, 4));
-console.log(JSON.stringify(newData));
+// console.log(JSON.stringify(newData));
 });

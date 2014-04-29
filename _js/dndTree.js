@@ -46,7 +46,8 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
         }
     }
 
-    // Call visit function to establish maxLabelLength
+    // Call visit function to establish maxLabelLength. This will recursively go through 
+    // every node to see which node has the longest length, and store it in the maxLabelLength variable
     visit(treeData, function(d) {
         totalNodes++;
         maxLabelLength = Math.max(d.name.length, maxLabelLength);
@@ -59,12 +60,22 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     // sort the tree according to the node names
     // jenton edit: need to sort the grades by a specific order.
     // need an array for this?
+    // reference: http://stackoverflow.com/questions/6591556/how-to-sort-list-items-using-custom-sort-order-in-jquery
 
+    var gradeOrder = ['grade: k', 'grade: 1', 'grade: 2', 'grade: 3', 'grade: 4', 'grade: 5', 'grade: 6 - 8', 'grade: 6', 'grade: 7', 'grade: 8', 'grade: hsn', 'grade: hsa', 'grade: hsf', 'grade: hsm', 'grade: hsg', 'grade: hss', 'grade: 9 - 10', 'grade: 11 - 12'];
     function sortTree() {
         tree.sort(function(a, b) {
+            
+            if ($.inArray(a.name.toLowerCase(),gradeOrder) != -1 && $.inArray(b.name.toLowerCase(),gradeOrder) != -1 ) { 
+                var indexA = $.inArray( a.name.toLowerCase(), gradeOrder);
+                var indexB = $.inArray( b.name.toLowerCase(), gradeOrder);
+                return ( indexA < indexB) ? -1 : ( indexA > indexB) ? 1 : 0;
+            }
             return b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1;
+
         });
     }
+
     // Sort the tree initially incase the JSON isn't in a sorted order.
     sortTree();
 
@@ -365,10 +376,10 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
 
         // Set widths between levels based on maxLabelLength.
         nodes.forEach(function(d) {
-            d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
+            //d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
             // alternatively to keep a fixed scale one can set a fixed depth per level
             // Normalize for fixed-depth by commenting out below line
-            // d.y = (d.depth * 500); //500px per level.
+            d.y = (d.depth * 500); //500px per level.
         });
 
         // Update the nodes…
@@ -435,7 +446,8 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
 
         // Change the circle fill depending on whether it has children and is collapsed
         node.select("circle.nodeCircle")
-            .attr("r", 4.5)
+            .attr("r", 10)
+            //.attr("r", 4.5)
             .style("fill", function(d) {
                 return d._children ? "lightsteelblue" : "#fff";
             });
