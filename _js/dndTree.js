@@ -26,11 +26,18 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     var tree = d3.layout.tree()
         .size([viewerHeight, viewerWidth]);
 
-    // Jenton Edit: hover text div
+    // Jenton Edit: setting the hover text div's height and width
     $(function() {
         $( "#standard-hover-div").
         width(viewerWidth)
-        .height(viewerHeight - 100);
+        .height($(document).height() - viewerHeight);
+    });
+
+    // Jenton Edit: setting the filter column's height and width
+    $(function() {
+        $( "#filter-column").
+        width(200)
+        .height(viewerHeight);
     });
 
     // define a d3 diagonal projection for use by the node paths later on.
@@ -170,7 +177,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
 
     // define the baseSvg, attaching a class for styling and the zoomListener
     var baseSvg = d3.select("#tree-container").append("svg")
-        .attr("width", viewerWidth)
+        .attr("width", viewerWidth-200)
         .attr("height", viewerHeight)
         .attr("class", "overlay")
         .call(zoomListener);
@@ -357,12 +364,17 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     }
 
     // Toggle children on click.
-
     function click(d) {
         if (d3.event.defaultPrevented) return; // click suppressed
         d = toggleChildren(d);
+        // Jenton Edit: Don't centerNode if the node has no children (standards node)
+        if (d.standardText) { // only the leaf has the standardText, so this check works
+            update(d);
+            //centerNode(d);
+        } else {
         update(d);
         centerNode(d);
+        }
     }
 
     function update(source) {
@@ -382,7 +394,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
             }
         };
         childCount(0, root);
-        var newHeight = d3.max(levelWidth) * 38; // jenton edit: 50 pixels per line for the height spread (default was 25)
+        var newHeight = d3.max(levelWidth) * 38; // jenton edit: 38 pixels per line for the height spread (default was 25)
         tree = tree.size([newHeight, viewerWidth]);
 
         // Compute the new tree layout.
@@ -394,8 +406,8 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
             //d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
             // alternatively to keep a fixed scale one can set a fixed depth per level
             // Normalize for fixed-depth by commenting out below line
-            //Jenton Edit: enabled the line below to create a fixed scale
-            d.y = (d.depth * 500); //500px per level.
+            //Jenton Edit: enabled the line below to create a fixed scale, for the horizontal spread
+            d.y = (d.depth * 250); //500px per level.
         });
 
         // Update the nodes…
@@ -424,25 +436,54 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
 
         // Jenton Edit: I changed the -10 : 10 ternary operator to -20 : 20 to make the text labels farther from the circles
         // Jenton Edit: This code changes the placement of the text
-        nodeEnter.append("text")
-            /*.attr("x", function(d) { // original
-                return d.children || d._children ? -20 : 20;
-            })*/ 
+        /*nodeEnter.append("text")
+            //.attr("x", function(d) { // original
+            //    return d.children || d._children ? -20 : 20;
+            //}) 
             .attr("x", function(d) { // change the text on the end nodes so it shows up to the left of the end node
                 return d.children || d._children ? -20 : -20;
             })
             .attr("dy", ".35em")
             .attr('class', 'nodeText')
-            /*.attr("text-anchor", function(d) {
-                return d.children || d._children ? "end" : "start";
-            })*/
+            //.attr("text-anchor", function(d) {
+            //    return d.children || d._children ? "end" : "start";
+            //})
             .attr("text-anchor", function(d) {
                 return d.children || d._children ? "end" : "end";
             })
             .text(function(d) {
                 return d.name;
             })
-            .style("fill-opacity", 0);
+            .style("fill-opacity", 0);*/
+
+            // Jenton Edit: Code to have two lines of text for nodes with longer test
+            // Source: http://stackoverflow.com/questions/20810659/breaking-text-from-json-into-several-lines-for-displaying-labels-in-a-d3-force-l
+        var maxLength = 40;
+        var separation = 18;
+        var textX = 0;
+        nodeEnter.append("text")
+            .attr("dy", "0.3em")
+            .each(function (d) {
+            var lines = wordwrap2(d.name, maxLength).split('\n');
+            console.log(d.name);
+            console.log(lines);
+            for (var i = 0; i < lines.length; i++) {
+                d3.select(this)
+                    .append("tspan")
+                    .attr("dy", separation)
+                    .attr("x", textX)
+                    .text(lines[i]);
+            }
+        });
+
+        function wordwrap2( str, width, brk, cut ) {
+            brk = brk || '\n';
+            width = width || 75;
+            cut = cut || false;
+            if (!str) { return str; }
+            var regex = '.{1,' +width+ '}(\\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
+            return str.match( RegExp(regex, 'g') ).join( brk );
+        }
 
         // phantom node to give us mouseover in a radius around it
         /*nodeEnter.append("circle")
@@ -474,7 +515,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
         // Change the circle fill depending on whether it has children and is collapsed
         // also where color is
         node.select("circle.nodeCircle")
-            .attr("r", 15)
+            .attr("r", 15) // Jenton Edit: Changes area of circle
             //.attr("r", 4.5)
             .style("fill", function(d) {
                 return d._children ? "lightsteelblue" : "#fff";
@@ -566,10 +607,19 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     });
 
     // Layout the tree initially and center on the root node.
-    // Jenton Reference: need to try to center the graph on the English/Math level on first load
+    // Jenton Edit: Loading the tree graph on the Subject Level
     update(root);
-    centerNode(root);
-    //centerNode(root.child('.nodeCircle'));
+    //centerNode(root); //original code
+
+    //Jenton Edit: toggling the first element in the children of the root, which is English
+    var b = toggleChildren(root.children[0]);    
+    //Jenton Edit: update the tree to reflect the toggle
+    update(b);
+    //Jenton Edit: center the tree on the selection
+    centerNode(b);
+
+    //centerNode(root.children[0]); //children[0] is the English element, children[1] is the math element
+    //have to use toggleChildren, then update()
 
     //Jenton Edit: trying to get a zoom slider working
     // source: http://computing.dcu.ie/~dganguly/d3sliderzoom.htm
@@ -627,6 +677,7 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     }
 
     // Toggle children on click.
+    // Jenton Edit: Doesn't do anything right now. Only for the tooltip that appears next to node
     function mouseout(d) {
         d3.select(this).select("text.hover").remove();
         
