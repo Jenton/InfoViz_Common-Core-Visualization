@@ -201,12 +201,12 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
         scale = zoomListener.scale();
         x = -source.y0;
         y = -source.x0;
-        console.log("x: " + x);
-        console.log("y: " + y);
+        // console.log("x: " + x);
+        // console.log("y: " + y);
         x = x * scale + viewerWidth / 2;
         y = y * scale + viewerHeight / 2;
-        console.log("x: " + x);
-        console.log("y: " + y);
+        // console.log("x: " + x);
+        // console.log("y: " + y);
         d3.select('g').transition()
             .duration(duration)
             .attr("transform", "translate(" + x + "," + y + ")scale(" + scale + ")");
@@ -236,8 +236,8 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             update(d);
             //centerNode(d);
         } else {
-        update(d);
-        centerNode(d);
+            update(d);
+            centerNode(d);
         }
     }
 
@@ -478,6 +478,11 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
  	 root.children.forEach(function(child){
  	 collapse(child);
     });
+    
+
+    //////////////////////////
+    // Initialization Start //
+    //////////////////////////
 
     // Layout the tree initially and center on the root node.
     // Jenton Edit: Loading the tree graph on the Subject Level
@@ -491,8 +496,42 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
     //Jenton Edit: center the tree on the selection
     centerNode(b);
 
-    //centerNode(root.children[0]); //children[0] is the English element, children[1] is the math element
-    //have to use toggleChildren, then update()
+    // Build the dropdown menu (from http://stackoverflow.com/questions/16611541/return-data-based-on-dropdown-menu)    
+    subjectLabels = ["english", "math"];
+    options = [0, 1];
+
+
+    d3.select(".subjectFilter")
+        .append("select").attr("id", "subjectFilter")
+        .selectAll("option")
+        .data(options)
+        .enter()
+        .append("option").attr("value", function(d){ return subjectLabels[d];}) 
+        // Provide available text for the dropdown options
+        .text(function(d) {return subjectLabels[d];})
+
+    // Build grade dropdown placeholder
+    d3.select(".gradeFilter")
+        .append("select").attr("id", "gradeFilter");
+
+    //populate grades for subject on first load
+        var key = $("#subjectFilter")[0].selectedIndex;
+        console.log(key);
+        populateGrades(key);
+
+    // Build domain dropdown placeholder
+    d3.select(".domainFilter")
+        .append("select").attr("id", "domainFilter");
+
+    // Build domain dropdown placeholder
+    d3.select(".clusterFilter")
+        .append("select").attr("id", "clusterFilter");
+
+
+    //////////////////////////
+    // Initialization End   //
+    //////////////////////////
+
 
     //Jenton Edit: trying to get a zoom slider working
     // source: http://computing.dcu.ie/~dganguly/d3sliderzoom.htm
@@ -556,33 +595,124 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
         
     }
 
+    //populate grade dropdown function
+    function populateGrades(key){
+        var numberOfGrades = root.children[key].children.length; //create an array based on how many grades in subject
+        console.log(numberOfGrades);
+        var gradeOptions = [0]; //creating an array with a 0 element to account for the dummy, 'select a grade' element
+        var gradeLabels = ['select a grade'];
 
-//Drop Down Filter code 
-//fill_arr = fill.range();
-subjectLabels = ["english", "math", "C", "D"];
-options = [0, 1, 2, 3];
+        for (var i = 0; i < numberOfGrades; i++) {
+            gradeOptions.push(i+1);
+            gradeLabels.push(root.children[key].children[i].name);
+        }
+        console.log(gradeOptions);
+        console.log(gradeLabels);
 
-// Build the dropdown menu (from http://stackoverflow.com/questions/16611541/return-data-based-on-dropdown-menu)
-d3.select(".subjectFilter")
-    .append("select").attr("id", "subjectFilter")
-    .selectAll("option")
-    .data(options)
-    .enter()
-    .append("option").attr("value", function(d){ return subjectLabels[d];}) 
-    // Provide available text for the dropdown options
-    .text(function(d) {return subjectLabels[d];})
+        //clear out whatever's in the grade filter
+        d3.select("#gradeFilter")
+            .selectAll("option").remove();
 
-// Build grade dropdown placeholder
-d3.select(".gradeFilter")
-    .append("select").attr("id", "gradeFilter");
+        //append in the pertinent grades to the dropdown
+        d3.select("#gradeFilter")
+            .selectAll("option")
+            .data(gradeOptions)
+            .enter()
+            .append("option").attr("value", function(d){ return gradeLabels[d];}) 
+            // Provide available text for the dropdown options
+            .text(function(d) {return gradeLabels[d];})
+    }
 
+    //populate domain dropdown function (if grade is first)
+    function populateDomains(subjectKey, gradeKey){
+        console.log("subjectKey: " + subjectKey);
+        console.log("gradeKey: " + gradeKey);
+        console.log(root.children[subjectKey].children[gradeKey]);
+        
+        //when opening up the domains, since the nodes are usually hidden, children.length doesn't exist in the node.
+        // wherease _children.length does exist. 
+        // this might mess up if some nodes are open and some nodes are not?
+        try {
+            var numberOfDomains = root.children[subjectKey].children[gradeKey].children.length; //create an array based on how many domains in the selected grade
+        } catch (e) {
+            // statements to handle TypeError exceptions
+            var numberOfDomains = root.children[subjectKey].children[gradeKey]._children.length; //create an array based on how many domains in the selected grade
+        } 
+        
+        console.log("number of Domains: " + numberOfDomains);
+        var domainOptions = [0]; //creating an array with a 0 element to account for the dummy, 'select a domain' element
+        var domainLabels = ['select a domain'];
+
+        for (var i = 0; i < numberOfDomains; i++) {
+            domainOptions.push(i+1);
+            domainLabels.push(root.children[subjectKey].children[gradeKey]._children[i].name);
+        }
+        console.log(domainOptions);
+        console.log(domainLabels);
+        domainLabels.sort();
+
+        //clear out whatever's in the domain filter
+        d3.select("#domainFilter")
+            .selectAll("option").remove();
+
+        //append in the pertinent domains to the dropdown
+        d3.select("#domainFilter")
+            .selectAll("option")
+            .data(domainOptions)
+            .enter()
+            .append("option").attr("value", function(d){ return domainLabels[d];}) 
+            // Provide available text for the dropdown options
+            .text(function(d) {return domainLabels[d];})
+    }
+
+    //populate cluster dropdown function
+    function populateClusters(subjectKey, gradeKey, domainKey){
+        console.log("subjectKey: " + subjectKey);
+        console.log("gradeKey: " + gradeKey);
+        console.log("domainKey: " + domainKey);
+        console.log(root.children[subjectKey].children[gradeKey].children[domainKey]);
+        
+        //when opening up the cluster, since the nodes are usually hidden, children.length doesn't exist in the node.
+        // wherease _children.length does exist. 
+        // this might mess up if some nodes are open and some nodes are not?
+        try {
+            var numberOfClusters = root.children[subjectKey].children[gradeKey].children[domainKey].children.length; //create an array based on how many clusters in the selected grade
+        } catch (e) {
+            // statements to handle TypeError exceptions
+            var numberOfClusters = root.children[subjectKey].children[gradeKey].children[domainKey]._children.length; //create an array based on how many clusters in the selected grade
+        } 
+        
+        console.log("number of Clusters: " + numberOfClusters);
+        var clusterOptions = [0]; //creating an array with a 0 element to account for the dummy, 'select a domain' element
+        var clusterLabels = ['select a cluster'];
+
+        for (var i = 0; i < numberOfClusters; i++) {
+            clusterOptions.push(i+1);
+            clusterLabels.push(root.children[subjectKey].children[gradeKey].children[domainKey]._children[i].name);
+        }
+        console.log(clusterOptions);
+        console.log(clusterLabels);
+        clusterLabels.sort();
+
+        //clear out whatever's in the cluster filter
+        d3.select("#clusterFilter")
+            .selectAll("option").remove();
+
+        //append in the pertinent cluster to the dropdown
+        d3.select("#clusterFilter")
+            .selectAll("option")
+            .data(clusterOptions)
+            .enter()
+            .append("option").attr("value", function(d){ return clusterLabels[d];}) 
+            // Provide available text for the dropdown options
+            .text(function(d) {return clusterLabels[d];})
+    }
+
+//Subject filter change listener
 d3.select('#subjectFilter')
     .on("change", function() {
 
     key = this.selectedIndex;
-    console.log(this.value);
-    console.log(key);
-
     
     root.children.forEach(function(d, i) {
         console.log(i);
@@ -593,39 +723,15 @@ d3.select('#subjectFilter')
             centerNode(openSelectedSubject);
             
         } else {
-            var closeSelectedSubject = toggleChildren(root.children[i]);
-            update(closeSelectedSubject);
+            collapse(root.children[i]);
+            update(root.children[i]);
         }
     });
 
     console.log(root.children[key].children);
  
-
     //populate grade dropdown
-    var numberOfGrades = root.children[key].children.length; //create an array based on how many grades in subject
-    console.log(numberOfGrades);
-    var gradeOptions = [];
-    var gradeLabels = [];
-
-    for (var i = 0; i < numberOfGrades; i++) {
-        gradeOptions.push(i);
-        gradeLabels.push(root.children[key].children[i].name);
-    }
-    console.log(gradeOptions);
-    console.log(gradeLabels);
-
-    //clear out whatever's in the grade filter
-    d3.select("#gradeFilter")
-        .selectAll("option").remove();
-
-    //append in the pertinent grades to the dropdown
-    d3.select("#gradeFilter")
-        .selectAll("option")
-        .data(gradeOptions)
-        .enter()
-        .append("option").attr("value", function(d){ return gradeLabels[d];}) 
-        // Provide available text for the dropdown options
-        .text(function(d) {return gradeLabels[d];})
+    populateGrades(key);
     });
 
 //listener for grade dropdown change
@@ -637,30 +743,111 @@ d3.select('#gradeFilter')
     var subjectKey = $("#subjectFilter")[0].selectedIndex;
     console.log("SubjectKey: " + subjectKey);
 
-    key = this.selectedIndex;
-    console.log(this.value);
-    console.log(key);
+    var key = this.selectedIndex-1; // minus 1 because otherwise, it opens the wrong node
+    console.log("value: " + this.value);
+    console.log("key: " +key);
+
+    populateDomains(subjectKey,key);
+    console.log(root.children[subjectKey].children);
 
     
     root.children[subjectKey].children.forEach(function(d, i) {
         console.log(i);
         //close the open subject node when switching subjects
         if (i == key) {
-            var openSelectedSubject = toggleChildren(root.children[subjectKey].children[key]);
+            //d is the same as root.children[subjectKey].children[i]
+            console.log(d);
+            //console.log(root.children[subjectKey].children[i])
+            var openSelectedSubject = toggleChildren(d);
+            //console.log(openSelectedSubject);
             update(openSelectedSubject);
-            centerNode(openSelectedSubject);
+            centerNode(openSelectedSubject);            
             
-        } else {
-                collapse(root.children[subjectKey].children[i]);
-                //var closeSelectedSubject = toggleChildren(root.children[subjectKey].children[i]);
-                //update(closeSelectedSubject);
+        } else {            
+                collapse(d);
+                update(d);
         }
         });
 
     });
 
+//listener for domain dropdown change
+d3.select('#domainFilter')
+    .on("change", function() {
 
-//end
+    //var subjectKey = d3.select('#subjectFilter').value();
+    console.log($("#subjectFilter"));
+    
+    var subjectKey = $("#subjectFilter")[0].selectedIndex;
+    var gradeKey = $("#gradeFilter")[0].selectedIndex-1;
+    
+    var key = this.selectedIndex-1; // minus 1 because otherwise, it opens the wrong node
+    console.log("key: " + key);
+    console.log("key value: " + this.value);
+    console.log("SubjectKey: " + subjectKey);
+    console.log("SubjectKey Value: " + $("#subjectFilter")[0].value);
+    console.log("GradeKey: " + gradeKey);
+    console.log("GradeKey Value: " + $("#gradeFilter")[0].value);
+
+    populateClusters(subjectKey,gradeKey,key);
+
+    console.log(root.children[subjectKey].children[gradeKey]);
+
+          
+    root.children[subjectKey].children[gradeKey].children.forEach(function(d, i) {
+        if (i == key) {        
+            var openSelectedSubject = toggleChildren(d);
+            update(openSelectedSubject);
+            centerNode(openSelectedSubject);          
+            } else {            
+                collapse(d);
+                update(d); 
+            }
+    })
+ 
+})
+
+//listener for cluster dropdown change
+d3.select('#clusterFilter')
+    .on("change", function() {
+
+    //var subjectKey = d3.select('#subjectFilter').value();
+    console.log($("#subjectFilter"));
+    
+    var subjectKey = $("#subjectFilter")[0].selectedIndex;
+    var gradeKey = $("#gradeFilter")[0].selectedIndex-1;
+    var domainKey = $("#domainFilter")[0].selectedIndex-1;
+    
+    var key = this.selectedIndex-1; // minus 1 because otherwise, it opens the wrong node
+    console.log("key: " + key);
+    console.log("key value: " + this.value);
+    console.log("SubjectKey: " + subjectKey);
+    console.log("SubjectKey Value: " + $("#subjectFilter")[0].value);
+    console.log("GradeKey: " + gradeKey);
+    console.log("GradeKey Value: " + $("#gradeFilter")[0].value);
+    console.log("DomainKey: " + domainKey);
+    console.log("DomainKey Value: " + $("#domainFilter")[0].value);
+
+    //populateClusters(subjectKey,gradeKey);
+
+    console.log(root.children[subjectKey].children[gradeKey].children[domainKey]);
+
+          
+    root.children[subjectKey].children[gradeKey].children[domainKey].children.forEach(function(d, i) {
+        if (i == key) {        
+            var openSelectedSubject = toggleChildren(d);
+            update(openSelectedSubject);
+            centerNode(openSelectedSubject);          
+            } else {            
+                collapse(root.children[subjectKey].children[gradeKey].children[domainKey].children[i]);
+                update(root.children[subjectKey].children[gradeKey].children[domainKey].children[i]); 
+            }
+    })
+ 
+})
+
+
+//code end
 });
 
 // Jenton Edit: Dropdown example from : http://stackoverflow.com/questions/11157806/specifying-the-json-file-for-some-visualization-via-a-dropdown-box
