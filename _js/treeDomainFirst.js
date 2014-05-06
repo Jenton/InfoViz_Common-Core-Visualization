@@ -1,9 +1,12 @@
-// Get JSON data
+////////////////////
+// Change Data Source to Domain First//
+////////////////////
 
-    
+function domainFirst(gradeDomainSwitch){
+
 
 //treeJSON = d3.json("./_data/flare.json", function(error, treeData) {
-treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
+treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
     // Calculate total nodes, max label length
     treeData = JSON.parse(treeData);
     var totalNodes = 0;
@@ -474,9 +477,9 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
     root.x0 = viewerHeight / 2;
     root.y0 = 0;
 
-	// Collapse all children of roots children before rendering.
- 	 root.children.forEach(function(child){
- 	 collapse(child);
+    // Collapse all children of roots children before rendering.
+     root.children.forEach(function(child){
+     collapse(child);
     });
     
 
@@ -487,20 +490,29 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
     // Layout the tree initially and center on the root node.
     // Jenton Edit: Loading the tree graph on the Subject Level
     update(root);
-    //centerNode(root); //original code
 
-    //Jenton Edit: toggling the first element in the children of the root, which is English
-    var b = toggleChildren(root.children[0]);    
+    var subjectLevel = toggleChildren(root.children[0]); //Jenton Edit: toggling the first element in the children of the root, which is English   
     //Jenton Edit: update the tree to reflect the toggle
-    update(b);
+    update(subjectLevel);
     //Jenton Edit: center the tree on the selection
-    centerNode(b);
+    centerNode(subjectLevel);
 
-    // Build the dropdown menu (from http://stackoverflow.com/questions/16611541/return-data-based-on-dropdown-menu)    
+    //////////////////////////////
+    // Initializing the Filter //
+    /////////////////////////////
+
+    //setting up variables
     subjectLabels = ["english", "math"];
     options = [0, 1];
+    gradeDomainSwitchValues = ["grade", "domain"];
+    gradeDomainSwitchLabels = ["Grade First", "Domain First"];
+    gradeDomainSwitchOptions = [0,1];
+    var gradeDomainDefaultSwitch = 0;
 
+    $(".gradeDomainSwitch").prepend("<h2 id='gradeDomainSwitch'>Showing Domain First</h2>")
+    $("#switchButton").val('Switch to Grade First');
 
+    //building the subject dropwdown menu (from http://stackoverflow.com/questions/16611541/return-data-based-on-dropdown-menu)    
     d3.select(".subjectFilter")
         .append("select").attr("id", "subjectFilter")
         .selectAll("option")
@@ -641,7 +653,7 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
         
         console.log("number of Domains: " + numberOfDomains);
         var domainOptions = [0]; //creating an array with a 0 element to account for the dummy, 'select a domain' element
-        var domainLabels = ['select a domain'];
+        var domainLabels = [];
 
         for (var i = 0; i < numberOfDomains; i++) {
             domainOptions.push(i+1);
@@ -650,6 +662,7 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
         console.log(domainOptions);
         console.log(domainLabels);
         domainLabels.sort();
+        domainLabels.unshift('select a domain'); //adding the 'select a domain' text to the beginning of the array
 
         //clear out whatever's in the domain filter
         d3.select("#domainFilter")
@@ -684,7 +697,7 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
         
         console.log("number of Clusters: " + numberOfClusters);
         var clusterOptions = [0]; //creating an array with a 0 element to account for the dummy, 'select a domain' element
-        var clusterLabels = ['select a cluster'];
+        var clusterLabels = [];
 
         for (var i = 0; i < numberOfClusters; i++) {
             clusterOptions.push(i+1);
@@ -693,6 +706,7 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
         console.log(clusterOptions);
         console.log(clusterLabels);
         clusterLabels.sort();
+        clusterLabels.unshift('select a domain');
 
         //clear out whatever's in the cluster filter
         d3.select("#clusterFilter")
@@ -714,6 +728,8 @@ d3.select('#subjectFilter')
 
     key = this.selectedIndex;
     
+
+
     root.children.forEach(function(d, i) {
         console.log(i);
         //close the open subject node when switching subjects
@@ -730,9 +746,14 @@ d3.select('#subjectFilter')
 
     console.log(root.children[key].children);
  
+    //clear out whatever's in the domain and cluster filter
+    d3.select("#domainFilter")
+        .selectAll("option").remove();
+    d3.select("#clusterFilter")
+        .selectAll("option").remove();
     //populate grade dropdown
     populateGrades(key);
-    });
+});
 
 //listener for grade dropdown change
 d3.select('#gradeFilter')
@@ -747,8 +768,11 @@ d3.select('#gradeFilter')
     console.log("value: " + this.value);
     console.log("key: " +key);
 
+    //clear out whatever's in the domain and cluster filter
+    d3.select("#clusterFilter")
+        .selectAll("option").remove();
     populateDomains(subjectKey,key);
-    console.log(root.children[subjectKey].children);
+    
 
     
     root.children[subjectKey].children.forEach(function(d, i) {
@@ -790,9 +814,6 @@ d3.select('#domainFilter')
     console.log("GradeKey Value: " + $("#gradeFilter")[0].value);
 
     populateClusters(subjectKey,gradeKey,key);
-
-    console.log(root.children[subjectKey].children[gradeKey]);
-
           
     root.children[subjectKey].children[gradeKey].children.forEach(function(d, i) {
         if (i == key) {        
@@ -846,27 +867,23 @@ d3.select('#clusterFilter')
  
 })
 
+//toggle for grade or domain first switch
+$("#switchButton").on('click', function() {
+    if (gradeDomainSwitch == 1) {
+        $("svg").remove();
+        $("#gradeDomainSwitch").remove();
+        $("#subjectFilter").remove();
+        $("#gradeFilter").remove();
+        $("#domainFilter").remove();
+        $("#clusterFilter").remove();
+        gradeDomainSwitch = 0;
+        gradeFirst(gradeDomainSwitch);
+    }
+});
 
 //code end
 });
 
-// Jenton Edit: Dropdown example from : http://stackoverflow.com/questions/11157806/specifying-the-json-file-for-some-visualization-via-a-dropdown-box
-/*var dropdown = d3.select("#subjectFilter")
-var change = function() {
-  console.log(dropdown);
-  //var source = dropdown.node().options[dropdown.node().selectedIndex].value;
-  //console.log(source);
-  d3.json(source, function(json) {
-     //continue doing stuff here.
-  })
 }
-
-dropdown.on("change", change) 
-change(); //trigger json on load
-
-*/
-
-
-
 
 
