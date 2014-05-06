@@ -3,7 +3,7 @@
     
 
 //treeJSON = d3.json("./_data/flare.json", function(error, treeData) {
-treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
+treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
     // Calculate total nodes, max label length
     treeData = JSON.parse(treeData);
     var totalNodes = 0;
@@ -132,48 +132,6 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
     var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 
-    //disabling the drag function
-    /*function initiateDrag(d, domNode) {
-        draggingNode = d;
-        d3.select(domNode).select('.ghostCircle').attr('pointer-events', 'none');
-        d3.selectAll('.ghostCircle').attr('class', 'ghostCircle show');
-        d3.select(domNode).attr('class', 'node activeDrag');
-
-        svgGroup.selectAll("g.node").sort(function(a, b) { // select the parent and sort the path's
-            if (a.id != draggingNode.id) return 1; // a is not the hovered element, send "a" to the back
-            else return -1; // a is the hovered element, bring "a" to the front
-        });
-        // if nodes has children, remove the links and nodes
-        if (nodes.length > 1) {
-            // remove link paths
-            links = tree.links(nodes);
-            nodePaths = svgGroup.selectAll("path.link")
-                .data(links, function(d) {
-                    return d.target.id;
-                }).remove();
-            // remove child nodes
-            nodesExit = svgGroup.selectAll("g.node")
-                .data(nodes, function(d) {
-                    return d.id;
-                }).filter(function(d, i) {
-                    if (d.id == draggingNode.id) {
-                        return false;
-                    }
-                    return true;
-                }).remove();
-        }
-
-        // remove parent link
-        parentLink = tree.links(tree.nodes(draggingNode.parent));
-        svgGroup.selectAll('path.link').filter(function(d, i) {
-            if (d.target.id == draggingNode.id) {
-                return true;
-            }
-            return false;
-        }).remove();
-
-        dragStarted = null;
-    }*/
 
     // define the baseSvg, attaching a class for styling and the zoomListener
     var baseSvg = d3.select("#tree-container").append("svg")
@@ -181,100 +139,6 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
         .attr("height", viewerHeight)
         .attr("class", "overlay")
         .call(zoomListener);
-
-
-    //disabling the drag function
-    /*// Define the drag listeners for drag/drop behaviour of nodes.
-    dragListener = d3.behavior.drag()
-        .on("dragstart", function(d) {
-            if (d == root) {
-                return;
-            }
-            dragStarted = true;
-            nodes = tree.nodes(d);
-            d3.event.sourceEvent.stopPropagation();
-            // it's important that we suppress the mouseover event on the node being dragged. Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
-        })
-        .on("drag", function(d) {
-            if (d == root) {
-                return;
-            }
-            if (dragStarted) {
-                domNode = this;
-                initiateDrag(d, domNode);
-            }
-
-            // get coords of mouseEvent relative to svg container to allow for panning
-            relCoords = d3.mouse($('svg').get(0));
-            if (relCoords[0] < panBoundary) {
-                panTimer = true;
-                pan(this, 'left');
-            } else if (relCoords[0] > ($('svg').width() - panBoundary)) {
-
-                panTimer = true;
-                pan(this, 'right');
-            } else if (relCoords[1] < panBoundary) {
-                panTimer = true;
-                pan(this, 'up');
-            } else if (relCoords[1] > ($('svg').height() - panBoundary)) {
-                panTimer = true;
-                pan(this, 'down');
-            } else {
-                try {
-                    clearTimeout(panTimer);
-                } catch (e) {
-
-                }
-            }
-
-            d.x0 += d3.event.dy;
-            d.y0 += d3.event.dx;
-            var node = d3.select(this);
-            node.attr("transform", "translate(" + d.y0 + "," + d.x0 + ")");
-            updateTempConnector();
-        }).on("dragend", function(d) {
-            if (d == root) {
-                return;
-            }
-            domNode = this;
-            if (selectedNode) {
-                // now remove the element from the parent, and insert it into the new elements children
-                var index = draggingNode.parent.children.indexOf(draggingNode);
-                if (index > -1) {
-                    draggingNode.parent.children.splice(index, 1);
-                }
-                if (typeof selectedNode.children !== 'undefined' || typeof selectedNode._children !== 'undefined') {
-                    if (typeof selectedNode.children !== 'undefined') {
-                        selectedNode.children.push(draggingNode);
-                    } else {
-                        selectedNode._children.push(draggingNode);
-                    }
-                } else {
-                    selectedNode.children = [];
-                    selectedNode.children.push(draggingNode);
-                }
-                // Make sure that the node being added to is expanded so user can see added node is correctly moved
-                expand(selectedNode);
-                sortTree();
-                endDrag();
-            } else {
-                endDrag();
-            }
-        });
-
-    function endDrag() {
-        selectedNode = null;
-        d3.selectAll('.ghostCircle').attr('class', 'ghostCircle');
-        d3.select(domNode).attr('class', 'node');
-        // now restore the mouseover event or we won't be able to drag a 2nd time
-        d3.select(domNode).select('.ghostCircle').attr('pointer-events', '');
-        updateTempConnector();
-        if (draggingNode !== null) {
-            update(root);
-            centerNode(draggingNode);
-            draggingNode = null;
-        }
-    }*/
 
     // Helper functions for collapsing and expanding nodes.
 
@@ -456,22 +320,31 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
             })
             .style("fill-opacity", 0);*/
 
-            // Jenton Edit: Code to have two lines of text for nodes with longer test
+            // Jenton Edit: Code to have two lines of text for nodes with longer text
             // Source: http://stackoverflow.com/questions/20810659/breaking-text-from-json-into-several-lines-for-displaying-labels-in-a-d3-force-l
-        var maxLength = 40;
-        var separation = 18;
+        var maxLength = 35;
+        var separation = 3;
         var textX = 0;
         nodeEnter.append("text")
-            .attr("dy", "0.3em")
+            .attr("dy", "0.35em")
+            .attr('class', 'nodeText')
+            .attr("text-anchor", function(d) {
+                return d.children || d._children ? "end" : "end";
+            })
             .each(function (d) {
             var lines = wordwrap2(d.name, maxLength).split('\n');
-            console.log(d.name);
-            console.log(lines);
+            /*console.log(d.name);
+            console.log(lines);*/
             for (var i = 0; i < lines.length; i++) {
+                if(i == 1){
+                    separation = 14;
+                }
                 d3.select(this)
                     .append("tspan")
                     .attr("dy", separation)
-                    .attr("x", textX)
+                    .attr("x", function(d) { // change the text on the end nodes so it shows up to the left of the end node
+                        return d.children || d._children ? -20 : -20;
+                    })
                     .text(lines[i]);
             }
         });
@@ -684,7 +557,129 @@ treeJSON = d3.text("./_data/flare.txt", function(error, treeData) {
     }
 
 
+//Drop Down Filter code 
+//fill_arr = fill.range();
+subjectLabels = ["english", "math", "C", "D"];
+options = [0, 1, 2, 3];
 
+// Build the dropdown menu (from http://stackoverflow.com/questions/16611541/return-data-based-on-dropdown-menu)
+d3.select(".subjectFilter")
+    .append("select").attr("id", "subjectFilter")
+    .selectAll("option")
+    .data(options)
+    .enter()
+    .append("option").attr("value", function(d){ return subjectLabels[d];}) 
+    // Provide available text for the dropdown options
+    .text(function(d) {return subjectLabels[d];})
+
+// Build grade dropdown placeholder
+d3.select(".gradeFilter")
+    .append("select").attr("id", "gradeFilter");
+
+d3.select('#subjectFilter')
+    .on("change", function() {
+
+    key = this.selectedIndex;
+    console.log(this.value);
+    console.log(key);
+
+    
+    root.children.forEach(function(d, i) {
+        console.log(i);
+        //close the open subject node when switching subjects
+        if (i == key) {
+            var openSelectedSubject = toggleChildren(root.children[key]);
+            update(openSelectedSubject);
+            centerNode(openSelectedSubject);
+            
+        } else {
+            var closeSelectedSubject = toggleChildren(root.children[i]);
+            update(closeSelectedSubject);
+        }
+    });
+
+    console.log(root.children[key].children);
+ 
+
+    //populate grade dropdown
+    var numberOfGrades = root.children[key].children.length; //create an array based on how many grades in subject
+    console.log(numberOfGrades);
+    var gradeOptions = [];
+    var gradeLabels = [];
+
+    for (var i = 0; i < numberOfGrades; i++) {
+        gradeOptions.push(i);
+        gradeLabels.push(root.children[key].children[i].name);
+    }
+    console.log(gradeOptions);
+    console.log(gradeLabels);
+
+    //clear out whatever's in the grade filter
+    d3.select("#gradeFilter")
+        .selectAll("option").remove();
+
+    //append in the pertinent grades to the dropdown
+    d3.select("#gradeFilter")
+        .selectAll("option")
+        .data(gradeOptions)
+        .enter()
+        .append("option").attr("value", function(d){ return gradeLabels[d];}) 
+        // Provide available text for the dropdown options
+        .text(function(d) {return gradeLabels[d];})
+    });
+
+//listener for grade dropdown change
+d3.select('#gradeFilter')
+    .on("change", function() {
+
+    //var subjectKey = d3.select('#subjectFilter').value();
+    console.log($("#subjectFilter"));
+    var subjectKey = $("#subjectFilter")[0].selectedIndex;
+    console.log("SubjectKey: " + subjectKey);
+
+    key = this.selectedIndex;
+    console.log(this.value);
+    console.log(key);
+
+    
+    root.children[subjectKey].children.forEach(function(d, i) {
+        console.log(i);
+        //close the open subject node when switching subjects
+        if (i == key) {
+            var openSelectedSubject = toggleChildren(root.children[subjectKey].children[key]);
+            update(openSelectedSubject);
+            centerNode(openSelectedSubject);
+            
+        } else {
+                collapse(root.children[subjectKey].children[i]);
+                //var closeSelectedSubject = toggleChildren(root.children[subjectKey].children[i]);
+                //update(closeSelectedSubject);
+        }
+        });
+
+    });
+
+
+//end
 });
+
+// Jenton Edit: Dropdown example from : http://stackoverflow.com/questions/11157806/specifying-the-json-file-for-some-visualization-via-a-dropdown-box
+/*var dropdown = d3.select("#subjectFilter")
+var change = function() {
+  console.log(dropdown);
+  //var source = dropdown.node().options[dropdown.node().selectedIndex].value;
+  //console.log(source);
+  d3.json(source, function(json) {
+     //continue doing stuff here.
+  })
+}
+
+dropdown.on("change", change) 
+change(); //trigger json on load
+
+*/
+
+
+
 
 

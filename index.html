@@ -2,45 +2,7 @@
 <meta charset="utf-8">
 <style type="text/css">
 
-	.node {
-    cursor: pointer;
-  }
-
-  .overlay{
-      background-color:#EEE;
-  }
-
-  .node circle {
-    fill: #fff;
-    stroke: steelblue;
-    stroke-width: 1.5px;
-  }
-
-  .node text {
-    font-size:12px;
-    font-family:sans-serif;
-    background-color: #00ff00;
-  }
-
-  .link {
-    fill: none;
-    stroke: #ccc;
-    stroke-width: 1.5px;
-  }
-
-  .templink {
-    fill: none;
-    stroke: red;
-    stroke-width: 3px;
-  }
-
-  .ghostCircle.show{
-      display:block;
-  }
-
-  .ghostCircle, .activeDrag .ghostCircle{
-       display: none;
-  }
+	
 
 </style>
 <link rel="stylesheet" href="./_css/style.css" />
@@ -53,7 +15,17 @@
 <!-- <script src="./_js/script.js"></script> -->
 <!-- <script src="./_js/tree.js"></script> -->
 <body>
-    <div id="filter-column"></div>
+    <div id="filter-column">
+      FILTER
+      <br />
+      <h2> Subject </h2>
+      <div class="subjectFilter">
+      </div>
+      <h2> Grade </h2>
+      <div class="gradeFilter">
+      </div>
+
+    </div>
     <div id="tree-container"></div>
     <div id="slider-vertical"></div>
     <div id="standard-hover-div"></div>
