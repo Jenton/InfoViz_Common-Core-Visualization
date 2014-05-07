@@ -1,6 +1,6 @@
 /* reset */
 
-html, body, address, blockquote, del, div, h1, h2, h3, h4, h5, h6, hr, ins, noscript, p, pre, dl, dt, dd, li, ol, ul, table, caption, colgroup, col, thead, tfoot, tbody, tr, td, th, form, button, fieldset, legend, label, select, optgroup, option, textarea, a, bdo, br, img, map, area, object, param, q, script, span, sub, sup, abbr, acronym, cite, code, del, dfn, em, ins, kbd, samp, strong, var, b, big, i, small, tt{border:0;font-family:inherit;font-size:100%;font-style:inherit;font-weight:inherit;margin:0;outline:0;padding:0;vertical-align:baseline;}
+html, body, address, blockquote, del, div, h1, h2, h3, h4, h5, h6, hr, ins, noscript, p, pre, dl, dt, dd, li, ol, ul, table, caption, colgroup, col, thead, tfoot, tbody, tr, td, th, form, button, fieldset, legend, label, select, optgroup, option, textarea, a, bdo, br, img, map, area, object, param, q, script, span, sub, sup, abbr, acronym, cite, code, del, dfn, em, ins, kbd, samp, strong, var, b, big, i, small, tt{border:0;font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;font-size:100%;font-style:inherit;font-weight:inherit;margin:0;outline:0;padding:0;vertical-align:baseline;color:#4a4f4f;}
 ol, ul{list-style:none;}
 th{text-align:left;}
 table{border-collapse:collapse;}
@@ -9,7 +9,11 @@ table{border-collapse:collapse;}
 
 /* global */
 
-body 											      {background:#fff;}
+body 											      {
+  background:#fff;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color:#4a4f4f;
+}
 a:link,
 a:visited										    {}
 a:hover,
@@ -129,7 +133,7 @@ svg {
   }
 
   .overlay{
-      background-color:#EEE;
+      background-color:#efefef;
   }
 
   .node circle {
@@ -140,7 +144,8 @@ svg {
 
   .node text {
     font-size:12px;
-    font-family:sans-serif;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #4a4f4f;
     background-color: #00ff00;
   }
 
@@ -164,6 +169,16 @@ svg {
        display: none;
   }     
 
+#viz-title{
+  display:block;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+#filter-title {
+  color: red;
+}
+
 #filter-column {
   float:left;
   margin-top:70px;
@@ -176,9 +191,10 @@ svg {
 }
 
 #standard-hover-div {
-background-color: rgba(203, 203, 203, .95);
+/*background-color: rgba(203, 203, 203, .95);*/
 /*width:500px;
 height:300px;*/
+background-color: #efefef;
 float:left;
 margin-left: 220px;
 bottom: 10px;
@@ -190,7 +206,8 @@ input {
 }
 
 #breadcrumb {
-  background-color: rgba(203, 203, 203, .95);
+/*  background-color: rgba(203, 203, 203, .95);*/
+  background-color: #efefef;
   float:left;
   height:30px;
   margin-top:70px;
@@ -211,6 +228,5 @@ height: 55px;
 width: 100%;
 position: fixed;
 z-index: 670;
-
 }
 
