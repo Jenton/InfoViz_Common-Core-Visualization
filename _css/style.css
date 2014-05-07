@@ -22,7 +22,7 @@ a:visited:hover									{}
 table td										    {}
 
 h1												      {font-size:2em; font-weight:bold; margin:0 0 20px 0; text-align: center;}
-h2												      {}
+h2												      {padding-bottom:5px;}
 h3												      {}
 h4												      {}
 h5												      {}
@@ -169,6 +169,30 @@ svg {
        display: none;
   }     
 
+.hover-text{
+  font-size:14px;
+}
+
+.subjectFilter{
+  font-size:14px;
+}
+
+.gradeFilter{
+  font-size:14px;
+}
+
+.domainFilter{
+  font-size:14px;
+}
+
+.clusterFilter{
+  font-size:14px;
+}
+
+/*.gradeDomainSwitch{
+  margin-top: px;
+}
+*/
 #viz-title{
   display:block;
   margin-right: auto;
@@ -199,6 +223,8 @@ float:left;
 margin-left: 220px;
 bottom: 10px;
 height:70px;
+padding-left:12px;
+padding-top:12px;
 }
 
 input {
@@ -211,6 +237,9 @@ input {
   float:left;
   height:30px;
   margin-top:70px;
+  padding-top:12px;
+  padding-left:12px;
+  font-size: 14px;
 }
 
 h1 {
