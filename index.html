@@ -17,6 +17,9 @@
 <!-- <script src="./_js/script.js"></script> -->
 <!-- <script src="./_js/tree.js"></script> -->
 <body>
+  <div id="header">
+  Common Core State Standards Visualizer
+  </div>
     <div id="filter-column">
       FILTER
       <br />
@@ -35,11 +38,13 @@
       <h2> Cluster </h2>
       <div class="clusterFilter">
       </div>
-
+      <div class="closeAllNodesSwitch">
+          <input name="closeAllNodesButton" type="button" value="Close All Nodes" id="closeAllNodesButton" />
+      </div>
 
     </div>
+    <div id="breadcrumb"></div>
     <div id="tree-container"></div>
-    <div id="slider-vertical"></div>
     <div id="standard-hover-div"></div>
 </body>
 </html>

@@ -61,7 +61,16 @@ main												    {margin:40px auto; position:relative; width:800px;}
 
 /* header */
 
-#header                         {}
+#header {
+box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1),0 1px 0 0 rgba(0, 0, 0, 0.1);
+-webkit-transform: translateZ(0);
+background: #fff;
+height: 55px;
+width: 100%;
+position: fixed;
+z-index: 670;
+
+}
 
 
 
@@ -169,22 +178,33 @@ svg {
 
 #filter-column {
   float:left;
+  margin-top:70px;
+  margin-left:20px;
 }
 
 #tree-container {
   float: left;
-}
-
-#slider-vertical {
-  float: left;
+  margin-top:5px; 
 }
 
 #standard-hover-div {
-background-color: #cbcbcb;
+background-color: rgba(203, 203, 203, .95);
+/*width:500px;
+height:300px;*/
 float:left;
+margin-left: 220px;
+bottom: 10px;
+height:70px;
 }
 
 input {
   font-size: 12px;
+}
+
+#breadcrumb {
+  background-color: rgba(203, 203, 203, .95);
+  float:left;
+  height:30px;
+  margin-top:70px;
 }
 

@@ -1,4 +1,4 @@
-function gradeFirst(gradeDomainSwitch){
+function gradeFirst(gradeDomainSwitch, viewerWidth, viewerHeight){
 
 //remove all elements and start with a blank slate
 
@@ -21,18 +21,11 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
     var root;
 
     // size of the diagram
-    var viewerWidth = $(document).width()-50;
-    var viewerHeight = $(document).height()-100;
+    /*var viewerWidth = $(document).width()-50;
+    var viewerHeight = $(document).height()-100;*/
 
     var tree = d3.layout.tree()
         .size([viewerHeight, viewerWidth]);
-
-    // Jenton Edit: setting the hover text div's height and width
-    $(function() {
-        $( "#standard-hover-div").
-        width(viewerWidth)
-        .height($(document).height() - viewerHeight);
-    });
 
     // Jenton Edit: setting the filter column's height and width
     $(function() {
@@ -232,12 +225,23 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
     function click(d) {
         if (d3.event.defaultPrevented) return; // click suppressed
         d = toggleChildren(d);
+        update(d);
         // Jenton Edit: Don't centerNode if the node has no children (standards node)
         if (d.standardText) { // only the leaf has the standardText, so this check works
-            update(d);
-            //centerNode(d);
+            $("#breadcrumb").html(d.parent.parent.parent.parent.name + " > " + d.parent.parent.parent.name + " > " + d.parent.parent.name + " > " + d.parent.name + " > " + d.name);
+            centerNode(d);
+        } else if (d.type == "cluster") {
+            $("#breadcrumb").html(d.parent.parent.parent.name + " > " + d.parent.parent.name + " > " + d.parent.name + " > " + d.name);
+            centerNode(d);
+        } else if (d.type == "domain") {
+            $("#breadcrumb").html(d.parent.parent.name + " > " + d.parent.name + " > " + d.name);
+            centerNode(d);
+        } else if (d.type == "grade") {
+            $("#breadcrumb").html(d.parent.name + " > " + d.name);
+            centerNode(d);
         } else {
-            update(d);
+            $(".hover-text").remove(); // clear the hover text div of any old content when clicking any nodes besides the leaf
+            $("#breadcrumb").html(d.name);
             centerNode(d);
         }
     }
@@ -507,8 +511,8 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
     gradeDomainSwitchOptions = [0,1];
     var gradeDomainDefaultSwitch = 0;
 
-    $(".gradeDomainSwitch").prepend("<h2 id='gradeDomainSwitch'>Showing Grade First</h2>")
-    $("#switchButton").val('Switch to Domain First');
+    $(".gradeDomainSwitch").prepend("<h4><small id='gradeDomainSwitch'>Showing Grade First</small></h4>")
+    $("#switchButton").text('Switch to Domain First');
 
     //building the subject dropwdown menu (from http://stackoverflow.com/questions/16611541/return-data-based-on-dropdown-menu)    
     d3.select(".subjectFilter")
@@ -525,38 +529,40 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
         .append("select").attr("id", "gradeFilter");
 
     //populate grades for subject on first load
-        var key = $("#subjectFilter")[0].selectedIndex;
-        console.log(key);
-        populateGrades(key);
+    var key = $("#subjectFilter")[0].selectedIndex;
+    console.log(key);
+    populateGrades(key);
+
+    //swap filter titles for grade and domain
+    $("#secondLevel").text("Grade");
+    $("#thirdLevel").text("Domain");
 
     // Build domain dropdown placeholder
     d3.select(".domainFilter")
         .append("select").attr("id", "domainFilter");
 
-    // Build domain dropdown placeholder
+    // Build cluster dropdown placeholder
     d3.select(".clusterFilter")
         .append("select").attr("id", "clusterFilter");
 
+    // Jenton Edit: setting the hover text div's height and width
+    console.log("svg width: " + $("svg").width());
+    $(function() {
+        $( "#standard-hover-div")
+        .width($("svg").width())
+        //.height(viewerHeight/7)
+    });
 
+    // Jenton Edit: setting the breadcrumb div's height and width
+    $(function() {
+        $( "#breadcrumb")
+        .width($("svg").width())
+        .html(root.children[0].name);
+        //.height(viewerHeight/8)
+    });
     //////////////////////////
     // Initialization End   //
     //////////////////////////
-
-
-    //Jenton Edit: trying to get a zoom slider working
-    // source: http://computing.dcu.ie/~dganguly/d3sliderzoom.htm
-    $(function() {
-        $( "#slider-vertical" ).slider({
-            orientation: "vertical",
-            range: "min",
-            min: 1000,
-            max: 10000,
-            value: 5000,
-            slide: function( event, ui ) {
-                zoomWithSlider(ui.value/5000);
-            }
-        }).height(viewerHeight);
-    });
 
     function zoomed() {
       container.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
@@ -584,15 +590,11 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
     // Jenton Edit: Show tooltip on mouseover : http://stackoverflow.com/questions/19297808/how-to-display-name-of-node-when-mouse-over-on-node-in-collapsible-tree-graph
     function mouseover(d) {
         
-        /*d3.select(this).append("text") //this code is for hovering tooltips near the node
-            .attr("class", "hover")
-            .attr('transform', function(d){ 
-                return 'translate(10, -10)';
-            })
-            .text(d.name + ": " + d.id);*/
-        $(".hover-text").remove(); // clear the hover text div of any old content when mouse hovering
         $("#standard-hover-div").append(function() {
             if (d.standardText) { //if logic to only show text when standardText exists
+                //$("#standard-hover-div").show();
+                $(".hover-text").remove(); // clear the hover text div of any old content when mouse hovering
+                $("#breadcrumb").html(d.parent.parent.parent.parent.name + " > " + d.parent.parent.parent.name + " > " + d.parent.parent.name + " > " + d.parent.name + " > " + d.name);
                 return "<p class='hover-text'>Standard Code: " + d.name + "<br />Standard Text: " + d.standardText + "</p>"; // append an element to the hover text div
            };
         });
@@ -602,6 +604,7 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
     // Jenton Edit: Doesn't do anything right now. Only for the tooltip that appears next to node
     function mouseout(d) {
         d3.select(this).select("text.hover").remove();
+        //$("#standard-hover-div").hide();
         
     }
 
@@ -875,9 +878,18 @@ $("#switchButton").on('click', function() {
         $("#domainFilter").remove();
         $("#clusterFilter").remove();
         gradeDomainSwitch = 1;
-        domainFirst(gradeDomainSwitch);
+        domainFirst(gradeDomainSwitch, viewerWidth, viewerHeight);
     };
 });
+
+$("#closeAllNodesButton").on('click', function(){
+    // Collapse all children of roots children before rendering.
+    root.children.forEach(function(child){
+        collapse(child);
+    });
+    update(root);
+    centerNode(root);
+})
 
 
 //code end

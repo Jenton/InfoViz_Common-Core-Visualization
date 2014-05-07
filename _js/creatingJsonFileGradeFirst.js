@@ -25,13 +25,13 @@ data.forEach(function(d){
         // Add a branch if it isn't there
         //console.log("isNaN(index) " + isNaN(index));
         if ( isNaN(index) ) {
-            depthCursor.push({ name : d[property], children : []});
+            depthCursor.push({ name : d[property], type: property, children : []});
             index = depthCursor.length - 1;
         }
         // Now reference the new child array as we go deeper into the tree
         depthCursor = depthCursor[index].children;
         // This is a leaf, so add the last element to the specified branch
-        if ( depth === levels.length - 1 ) depthCursor.push({ name : d.standardName, standardText : d.stateStandard });
+        if ( depth === levels.length - 1 ) depthCursor.push({ name : d.standardName, standardText : d.stateStandard, type : 'standard' });
     });
 });
 
