@@ -223,28 +223,114 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
         return d;
     }
 
-    // Toggle children on click.
+   // Toggle children on click.
     function click(d) {
         if (d3.event.defaultPrevented) return; // click suppressed
+        console.log(d);
+        console.log(d.parent);
+        
         d = toggleChildren(d);
+
         update(d);
         // Jenton Edit: Don't centerNode if the node has no children (standards node)
         if (d.standardText) { // only the leaf has the standardText, so this check works
             $("#breadcrumb").html(d.parent.parent.parent.parent.name + " > " + d.parent.parent.parent.name + " > " + d.parent.parent.name + " > " + d.parent.name + " > " + d.name);
             centerNode(d);
         } else if (d.type == "cluster") {
+            $(".hover-text").remove(); // clear the hover text div of any old content when clicking any nodes besides the leaf
             $("#breadcrumb").html(d.parent.parent.parent.name + " > " + d.parent.parent.name + " > " + d.parent.name + " > " + d.name);
+            $("#clusterFilter").find('option[value="' + d.name + '"]').attr("selected", true);
             centerNode(d);
         } else if (d.type == "grade") {
+            $(".hover-text").remove(); // clear the hover text div of any old content when clicking any nodes besides the leaf
             $("#breadcrumb").html(d.parent.parent.name + " > " + d.parent.name + " > " + d.name);
             centerNode(d);
-        } else if (d.type == "domain") {
+            
+            //getting the parent index
+            console.log(d.parent);
+            var subjectKey;
+            var subjectNextLevelKey;
+            var key;
+            //getting the index for the current depth and using that to populate the fields in the filter
+            d.parent.children.forEach(function(data, index){
+                console.log("data name: " + data.name);
+                console.log("d.name: " + d.name);
+                if (data.name == d.name){
+                    key = parseInt(index);
+                }
+            })
+            d.parent.parent.children.forEach(function(data, index){
+                console.log("data name: " + data.name);
+                console.log("d.name: " + d.name);
+                if (data.name == d.parent.name){
+                    subjectNextLevelKey = parseInt(index);
+                }    
+            })
+            d.parent.parent.parent.children.forEach(function(data, index){
+                console.log("data name: " + data.name);
+                console.log("d.name: " + d.name);
+                if (data.name == d.parent.parent.name){
+                    subjectKey = parseInt(index);
+                }    
+            })
+                console.log("subjectKey: " + subjectKey);
+                console.log("key: " + key);
+                populateClusters(subjectKey, subjectNextLevelKey, key);
+                console.log(d.name);
+                //changing the entries in the filter
+                $("#subjectFilter").find('option[value="' + d.parent.parent.name + '"]').attr("selected", true);
+                $("#gradeFilter").find('option[value="' + d.parent.name + '"]').attr("selected", true);
+                $("#domainFilter").find('option[value="' + d.name + '"]').attr("selected", true);
+
+
+        } else if (d.type == "domain") { // clicked node is a domain
+            $(".hover-text").remove(); // clear the hover text div of any old content when clicking any nodes besides the leaf
             $("#breadcrumb").html(d.parent.name + " > " + d.name);
             centerNode(d);
-        } else {
+            
+            //getting the parent index
+            console.log(d.parent);
+            var subjectKey;
+            var key;
+            //getting the index for the current depth and using that to populate the appropriate fields in the filter
+            d.parent.children.forEach(function(data, index){
+                console.log("data name: " + data.name);
+                console.log("d.name: " + d.name);
+                if (data.name == d.name){
+                    key = parseInt(index);
+                }
+            })
+            d.parent.parent.children.forEach(function(data, index){
+                console.log("data name: " + data.name);
+                console.log("d.name: " + d.name);
+                if (data.name == d.parent.name){
+                    subjectKey = parseInt(index);
+                }    
+            })
+                console.log("subjectKey: " + subjectKey);
+                console.log("key: " + key);
+                populateDomains(subjectKey, key);
+                
+                $("#subjectFilter").find('option[value="' + d.parent.name + '"]').attr("selected", true);
+                $("#gradeFilter").find('option[value="' + d.name + '"]').attr("selected", true);
+
+        } else { //clicked node is a subject
             $(".hover-text").remove(); // clear the hover text div of any old content when clicking any nodes besides the leaf
             $("#breadcrumb").html(d.name);
             centerNode(d);
+
+            //getting the parent index
+            console.log(d.parent);
+            //getting the index for the current depth and using that to populate the fields in the filter
+            d.parent.children.forEach(function(data, index){
+                console.log("data name: " + data.name);
+                console.log("d.name: " + d.name);
+                if (data.name == d.name){
+                    populateGrades(index);
+                    $("#subjectFilter").find('option[value="' + d.name + '"]').attr("selected", true);
+
+                }
+            })
         }
     }
 
@@ -506,7 +592,7 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
     /////////////////////////////
 
     //setting up variables
-    subjectLabels = ["english", "math"];
+    subjectLabels = ["English", "Math"];
     options = [0, 1];
     gradeDomainSwitchValues = ["grade", "domain"];
     gradeDomainSwitchLabels = ["Grade First", "Domain First"];
@@ -514,7 +600,9 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
     var gradeDomainDefaultSwitch = 0;
 
     $(".gradeDomainSwitch").prepend("<h4><small id='gradeDomainSwitch'>Showing Domain First</small></h4>")
-    $("#switchButton").text('Switch to Grade First');
+    $("#switchButton").val('Switch to Grade First');
+    $("#depth2").text("Domain");
+    $("#depth3").text("Grade");
 
     //building the subject dropwdown menu (from http://stackoverflow.com/questions/16611541/return-data-based-on-dropdown-menu)    
     d3.select(".subjectFilter")
@@ -616,7 +704,7 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
         var numberOfGrades = root.children[key].children.length; //create an array based on how many grades in subject
         console.log(numberOfGrades);
         var gradeOptions = [0]; //creating an array with a 0 element to account for the dummy, 'select a grade' element
-        var gradeLabels = ['select a grade'];
+        var gradeLabels = ['select a domain'];
 
         for (var i = 0; i < numberOfGrades; i++) {
             gradeOptions.push(i+1);
@@ -661,7 +749,11 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
 
         for (var i = 0; i < numberOfDomains; i++) {
             domainOptions.push(i+1);
-            domainLabels.push(root.children[subjectKey].children[gradeKey]._children[i].name);
+            try {
+                domainLabels.push(root.children[subjectKey].children[gradeKey]._children[i].name);
+            } catch (e) {
+                domainLabels.push(root.children[subjectKey].children[gradeKey].children[i].name);
+            }
         }
         console.log(domainOptions);
         console.log(domainLabels);
@@ -705,7 +797,11 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
 
         for (var i = 0; i < numberOfClusters; i++) {
             clusterOptions.push(i+1);
-            clusterLabels.push(root.children[subjectKey].children[gradeKey].children[domainKey]._children[i].name);
+            try {
+                clusterLabels.push(root.children[subjectKey].children[gradeKey].children[domainKey]._children[i].name);
+            } catch (e) {
+                clusterLabels.push(root.children[subjectKey].children[gradeKey].children[domainKey].children[i].name);
+            }
         }
         console.log(clusterOptions);
         console.log(clusterLabels);
@@ -732,6 +828,7 @@ d3.select('#subjectFilter')
 
     key = this.selectedIndex;
     
+    $("#breadcrumb").html(root.children[key].name);
 
 
     root.children.forEach(function(d, i) {
@@ -771,6 +868,8 @@ d3.select('#gradeFilter')
     var key = this.selectedIndex-1; // minus 1 because otherwise, it opens the wrong node
     console.log("value: " + this.value);
     console.log("key: " +key);
+
+    $("#breadcrumb").html(root.children[subjectKey].name + " > " + root.children[subjectKey].children[key].name );
 
     //clear out whatever's in the domain and cluster filter
     d3.select("#clusterFilter")
@@ -817,6 +916,8 @@ d3.select('#domainFilter')
     console.log("GradeKey: " + gradeKey);
     console.log("GradeKey Value: " + $("#gradeFilter")[0].value);
 
+    $("#breadcrumb").html(root.children[subjectKey].name + " > " + root.children[subjectKey].children[gradeKey].name + " > " + root.children[subjectKey].children[gradeKey].children[key].name );
+
     populateClusters(subjectKey,gradeKey,key);
           
     root.children[subjectKey].children[gradeKey].children.forEach(function(d, i) {
@@ -853,7 +954,7 @@ d3.select('#clusterFilter')
     console.log("DomainKey: " + domainKey);
     console.log("DomainKey Value: " + $("#domainFilter")[0].value);
 
-    //populateClusters(subjectKey,gradeKey);
+    $("#breadcrumb").html(root.children[subjectKey].name + " > " + root.children[subjectKey].children[gradeKey].name + " > " + root.children[subjectKey].children[gradeKey].children[domainKey].name + " > " + root.children[subjectKey].children[gradeKey].children[domainKey].children[key].name );
 
     console.log(root.children[subjectKey].children[gradeKey].children[domainKey]);
 
@@ -892,6 +993,8 @@ $("#closeAllNodesButton").on('click', function(){
     });
     update(root);
     centerNode(root);
+
+    //To Do : When clicking the close all Nodes button, reset filters
 })
 
 //code end
