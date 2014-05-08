@@ -467,61 +467,61 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
                 if (d.type == "grade") { // only the leaf has the standardText, so this check works
                     console.log("grade name: " + d.name);
                     if(d.name == "Grade: K") { return d._children ? "#6edff9" : "#fff";}
-                    else if (d.name == "Grade: 1") { return d._children ? "#2be2d0" : "#fff";}
-                    else if (d.name == "Grade: 2") { return d._children ? "#409edd" : "#fff";}
-                    else if (d.name == "Grade: 3") { return d._children ? "#3232c9" : "#fff";}
-                    else if (d.name == "Grade: 4") { return d._children ? "#ae76ff" : "#fff";}
-                    else if (d.name == "Grade: 5") { return d._children ? "#7228c9" : "#fff";}
-                    else if (d.name == "Grade: 6 - 8") { return d._children ? "#f77e11" : "#fff";}
-                    else if (d.name == "Grade: 6") { return d._children ? "#ffe566" : "#fff";}
-                    else if (d.name == "Grade: 7") { return d._children ? "#f7b31c" : "#fff";}
-                    else if (d.name == "Grade: 8") { return d._children ? "#e2110c" : "#fff";}
-                    else if (d.name == "Grade: 9 - 10") { return d._children ? "#1c421c" : "#fff";}                    
+                    else if (d.name == "Grade: 1") { return d._children ? "#95f4e9" : "#fff";}
+                    else if (d.name == "Grade: 2") { return d._children ? "#33ccd3" : "#fff";}
+                    else if (d.name == "Grade: 3") { return d._children ? "#71abff" : "#fff";}
+                    else if (d.name == "Grade: 4") { return d._children ? "#3232c9" : "#fff";}
+                    else if (d.name == "Grade: 5") { return d._children ? "#1717a0" : "#fff";}
+                    else if (d.name == "Grade: 6 - 8") { return d._children ? "#e28bf7" : "#fff";}
+                    else if (d.name == "Grade: 6") { return d._children ? "#ae76ff" : "#fff";}
+                    else if (d.name == "Grade: 7") { return d._children ? "#7228c9" : "#fff";}
+                    else if (d.name == "Grade: 8") { return d._children ? "#c61ae5" : "#fff";}
+                    else if (d.name == "Grade: 9 - 10") { return d._children ? "#a3e867" : "#fff";}                    
                     else if (d.name == "Grade: 11 - 12") { return d._children ? "#39b54a" : "#fff";}
-                    else if (d.name == "Grade: HSN") { return d._children ? "#39b54a" : "#fff";}
-                    else if (d.name == "Grade: HSA") { return d._children ? "#106b10" : "#fff";}
-                    else if (d.name == "Grade: HSF") { return d._children ? "#a3e867" : "#fff";}
-                    else if (d.name == "Grade: HSG") { return d._children ? "#1c421c" : "#fff";}
-                    else if (d.name == "Grade: HSS") { return d._children ? "#0f8476" : "#fff";}                
+                    else if (d.name == "Grade: HSN") { return d._children ? "#a3e867" : "#fff";}
+                    else if (d.name == "Grade: HSA") { return d._children ? "#39b54a" : "#fff";}
+                    else if (d.name == "Grade: HSF") { return d._children ? "#1fa087" : "#fff";}
+                    else if (d.name == "Grade: HSG") { return d._children ? "#1b6d20" : "#fff";}
+                    else if (d.name == "Grade: HSS") { return d._children ? "#1a511a" : "#fff";}                
                 } else if (d.type == "domain") { // only the leaf has the standardText, so this check works
                     console.log("domain name: " + d.parent.name);
                     if(d.parent.name == "Grade: K") { return d._children ? "#6edff9" : "#fff";}
-                    else if (d.parent.name == "Grade: 1") { return d._children ? "#2be2d0" : "#fff";}
-                    else if (d.parent.name == "Grade: 2") { return d._children ? "#409edd" : "#fff";}
-                    else if (d.parent.name == "Grade: 3") { return d._children ? "#3232c9" : "#fff";}
-                    else if (d.parent.name == "Grade: 4") { return d._children ? "#ae76ff" : "#fff";}
-                    else if (d.parent.name == "Grade: 5") { return d._children ? "#7228c9" : "#fff";}
-                    else if (d.parent.name == "Grade: 6 - 8") { return d._children ? "#f77e11" : "#fff";}
-                    else if (d.parent.name == "Grade: 6") { return d._children ? "#ffe566" : "#fff";}
-                    else if (d.parent.name == "Grade: 7") { return d._children ? "#f7b31c" : "#fff";}
-                    else if (d.parent.name == "Grade: 8") { return d._children ? "#e2110c" : "#fff";}
-                    else if (d.parent.name == "Grade: 9 - 10") { return d._children ? "#1c421c" : "#fff";}
+                    else if (d.parent.name == "Grade: 1") { return d._children ? "#95f4e9" : "#fff";}
+                    else if (d.parent.name == "Grade: 2") { return d._children ? "#33ccd3" : "#fff";}
+                    else if (d.parent.name == "Grade: 3") { return d._children ? "#71abff" : "#fff";}
+                    else if (d.parent.name == "Grade: 4") { return d._children ? "#3232c9" : "#fff";}
+                    else if (d.parent.name == "Grade: 5") { return d._children ? "#1717a0" : "#fff";}
+                    else if (d.parent.name == "Grade: 6 - 8") { return d._children ? "#e28bf7" : "#fff";}
+                    else if (d.parent.name == "Grade: 6") { return d._children ? "#ae76ff" : "#fff";}
+                    else if (d.parent.name == "Grade: 7") { return d._children ? "#7228c9" : "#fff";}
+                    else if (d.parent.name == "Grade: 8") { return d._children ? "#c61ae5" : "#fff";}
+                    else if (d.parent.name == "Grade: 9 - 10") { return d._children ? "#a3e867" : "#fff";}
                     else if (d.parent.name == "Grade: 11 - 12") { return d._children ? "#39b54a" : "#fff";}
-                    else if (d.parent.name == "Grade: HSN") { return d._children ? "#39b54a" : "#fff";}
-                    else if (d.parent.name == "Grade: HSA") { return d._children ? "#106b10" : "#fff";}
-                    else if (d.parent.name == "Grade: HSF") { return d._children ? "#a3e867" : "#fff";}
-                    else if (d.parent.name == "Grade: HSG") { return d._children ? "#1c421c" : "#fff";}
-                    else if (d.parent.name == "Grade: HSS") { return d._children ? "#0f8476" : "#fff";}                
+                    else if (d.parent.name == "Grade: HSN") { return d._children ? "#a3e867" : "#fff";}
+                    else if (d.parent.name == "Grade: HSA") { return d._children ? "#39b54a" : "#fff";}
+                    else if (d.parent.name == "Grade: HSF") { return d._children ? "#1fa087" : "#fff";}
+                    else if (d.parent.name == "Grade: HSG") { return d._children ? "#1b6d20" : "#fff";}
+                    else if (d.parent.name == "Grade: HSS") { return d._children ? "#1a511a" : "#fff";}                
 
                 } else if (d.type == "cluster") { // only the leaf has the standardText, so this check works
                     console.log("grade name: " + d.parent.parent.name);
                     if(d.parent.parent.name == "Grade: K") { return d._children ? "#6edff9" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: 1") { return d._children ? "#2be2d0" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: 2") { return d._children ? "#409edd" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: 3") { return d._children ? "#3232c9" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: 4") { return d._children ? "#ae76ff" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: 5") { return d._children ? "#7228c9" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: 6 - 8") { return d._children ? "#f77e11" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: 6") { return d._children ? "#ffe566" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: 7") { return d._children ? "#f7b31c" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: 8") { return d._children ? "#e2110c" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: 9 - 10") { return d._children ? "#1c421c" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 1") { return d._children ? "#95f4e9" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 2") { return d._children ? "#33ccd3" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 3") { return d._children ? "#71abff" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 4") { return d._children ? "#3232c9" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 5") { return d._children ? "#1717a0" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 6 - 8") { return d._children ? "#e28bf7" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 6") { return d._children ? "#ae76ff" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 7") { return d._children ? "#7228c9" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 8") { return d._children ? "#c61ae5" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 9 - 10") { return d._children ? "#a3e867" : "#fff";}
                     else if (d.parent.parent.name == "Grade: 11 - 12") { return d._children ? "#39b54a" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: HSN") { return d._children ? "#39b54a" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: HSA") { return d._children ? "#106b10" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: HSF") { return d._children ? "#a3e867" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: HSG") { return d._children ? "#1c421c" : "#fff";}
-                    else if (d.parent.parent.name == "Grade: HSS") { return d._children ? "#0f8476" : "#fff";}                
+                    else if (d.parent.parent.name == "Grade: HSN") { return d._children ? "#a3e867" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: HSA") { return d._children ? "#39b54a" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: HSF") { return d._children ? "#1fa087" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: HSG") { return d._children ? "#1b6d20" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: HSS") { return d._children ? "#1a511a" : "#fff";}                
                    
                 } else {
                     return d._children ? "#4a4f4f" : "#fff";
@@ -530,77 +530,77 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             .style("stroke", function(d){
                 if (d.type == "grade") { // only the leaf has the standardText, so this check works                    
                     if (d.name == "Grade: K") { return d._children ? "#4a4f4f" : "#6edff9";}
-                    else if (d.name == "Grade: 1") { return d._children ? "#4a4f4f" : "#2be2d0";}
-                    else if (d.name == "Grade: 2") { return d._children ? "#4a4f4f" :  "#409edd";}
-                    else if (d.name == "Grade: 3") { return d._children ? "#4a4f4f" :  "#3232c9";}
-                    else if (d.name == "Grade: 4") { return d._children ? "#4a4f4f" :  "#ae76ff";}
-                    else if (d.name == "Grade: 5") { return d._children ? "#4a4f4f" :  "#7228c9";}
-                    else if (d.name == "Grade: 6 - 8") { return d._children ? "#4a4f4f" :  "#f77e11";}
-                    else if (d.name == "Grade: 6") { return d._children ? "#4a4f4f" :  "#ffe566";}
-                    else if (d.name == "Grade: 7") { return d._children ? "#4a4f4f" :  "#f7b31c";}
-                    else if (d.name == "Grade: 8") { return d._children ? "#4a4f4f" :  "#e2110c";}
-                    else if (d.name == "Grade: 9 - 10") { return d._children ? "#4a4f4f" :  "#1c421c";}
+                    else if (d.name == "Grade: 1") { return d._children ? "#4a4f4f" : "#95f4e9";}
+                    else if (d.name == "Grade: 2") { return d._children ? "#4a4f4f" :  "#33ccd3";}
+                    else if (d.name == "Grade: 3") { return d._children ? "#4a4f4f" :  "#71abff";}
+                    else if (d.name == "Grade: 4") { return d._children ? "#4a4f4f" :  "#3232c9";}
+                    else if (d.name == "Grade: 5") { return d._children ? "#4a4f4f" :  "#1717a0";}
+                    else if (d.name == "Grade: 6 - 8") { return d._children ? "#4a4f4f" :  "#e28bf7";}
+                    else if (d.name == "Grade: 6") { return d._children ? "#4a4f4f" :  "#ae76ff";}
+                    else if (d.name == "Grade: 7") { return d._children ? "#4a4f4f" :  "#7228c9";}
+                    else if (d.name == "Grade: 8") { return d._children ? "#4a4f4f" :  "#c61ae5";}
+                    else if (d.name == "Grade: 9 - 10") { return d._children ? "#4a4f4f" :  "#a3e867";}
                     else if (d.name == "Grade: 11 - 12") { return d._children ? "#4a4f4f" :  "#39b54a";}
-                    else if (d.name == "Grade: HSN") { return d._children ? "#4a4f4f" : "#39b54a";}
-                    else if (d.name == "Grade: HSA") { return d._children ? "#4a4f4f" : "#106b10";}
-                    else if (d.name == "Grade: HSF") { return d._children ? "#4a4f4f" : "#a3e867";}
-                    else if (d.name == "Grade: HSG") { return d._children ? "#4a4f4f" : "#1c421c";}
-                    else if (d.name == "Grade: HSS") { return d._children ? "#4a4f4f" : "#0f8476";}                
+                    else if (d.name == "Grade: HSN") { return d._children ? "#4a4f4f" : "#a3e867";}
+                    else if (d.name == "Grade: HSA") { return d._children ? "#4a4f4f" : "#39b54a";}
+                    else if (d.name == "Grade: HSF") { return d._children ? "#4a4f4f" : "#1fa087";}
+                    else if (d.name == "Grade: HSG") { return d._children ? "#4a4f4f" : "#1b6d20";}
+                    else if (d.name == "Grade: HSS") { return d._children ? "#4a4f4f" : "#1a511a";}                
                 } else if (d.type == "domain") {    
                     if (d.parent.name == "Grade: K") { return d._children ? "#4a4f4f" : "#6edff9";}
-                    else if (d.parent.name == "Grade: 1") { return d._children ? "#4a4f4f" : "#2be2d0";}
-                    else if (d.parent.name == "Grade: 2") { return d._children ? "#4a4f4f" :  "#409edd";}
-                    else if (d.parent.name == "Grade: 3") { return d._children ? "#4a4f4f" :  "#3232c9";}
-                    else if (d.parent.name == "Grade: 4") { return d._children ? "#4a4f4f" :  "#ae76ff";}
-                    else if (d.parent.name == "Grade: 5") { return d._children ? "#4a4f4f" :  "#7228c9";}
-                    else if (d.parent.name == "Grade: 6 - 8") { return d._children ? "#4a4f4f" :  "#f77e11";}
-                    else if (d.parent.name == "Grade: 6") { return d._children ? "#4a4f4f" :  "#ffe566";}
-                    else if (d.parent.name == "Grade: 7") { return d._children ? "#4a4f4f" :  "#f7b31c";}
-                    else if (d.parent.name == "Grade: 8") { return d._children ? "#4a4f4f" :  "#e2110c";}
-                    else if (d.parent.name == "Grade: 9 - 10") { return d._children ? "#4a4f4f" :  "#1c421c";}
+                    else if (d.parent.name == "Grade: 1") { return d._children ? "#4a4f4f" : "#95f4e9";}
+                    else if (d.parent.name == "Grade: 2") { return d._children ? "#4a4f4f" :  "#33ccd3";}
+                    else if (d.parent.name == "Grade: 3") { return d._children ? "#4a4f4f" :  "#71abff";}
+                    else if (d.parent.name == "Grade: 4") { return d._children ? "#4a4f4f" :  "#3232c9";}
+                    else if (d.parent.name == "Grade: 5") { return d._children ? "#4a4f4f" :  "#1717a0";}
+                    else if (d.parent.name == "Grade: 6 - 8") { return d._children ? "#4a4f4f" :  "#e28bf7";}
+                    else if (d.parent.name == "Grade: 6") { return d._children ? "#4a4f4f" :  "#ae76ff";}
+                    else if (d.parent.name == "Grade: 7") { return d._children ? "#4a4f4f" :  "#7228c9";}
+                    else if (d.parent.name == "Grade: 8") { return d._children ? "#4a4f4f" :  "#c61ae5";}
+                    else if (d.parent.name == "Grade: 9 - 10") { return d._children ? "#4a4f4f" :  "#a3e867";}
                     else if (d.parent.name == "Grade: 11 - 12") { return d._children ? "#4a4f4f" :  "#39b54a";}
-                    else if (d.parent.name == "Grade: HSN") { return d._children ? "#4a4f4f" : "#39b54a";}
-                    else if (d.parent.name == "Grade: HSA") { return d._children ? "#4a4f4f" : "#106b10";}
-                    else if (d.parent.name == "Grade: HSF") { return d._children ? "#4a4f4f" : "#a3e867";}
-                    else if (d.parent.name == "Grade: HSG") { return d._children ? "#4a4f4f" : "#1c421c";}
-                    else if (d.parent.name == "Grade: HSS") { return d._children ? "#4a4f4f" : "#0f8476";}                
+                    else if (d.parent.name == "Grade: HSN") { return d._children ? "#4a4f4f" : "#a3e867";}
+                    else if (d.parent.name == "Grade: HSA") { return d._children ? "#4a4f4f" : "#39b54a";}
+                    else if (d.parent.name == "Grade: HSF") { return d._children ? "#4a4f4f" : "#1fa087";}
+                    else if (d.parent.name == "Grade: HSG") { return d._children ? "#4a4f4f" : "#1b6d20";}
+                    else if (d.parent.name == "Grade: HSS") { return d._children ? "#4a4f4f" : "#1a511a";}                
 
                 } else if (d.type == "cluster") { // only the leaf has the standardText, so this check works
                     if (d.parent.parent.name == "Grade: K") { return d._children ? "#4a4f4f" : "#6edff9";}
-                    else if (d.parent.parent.name == "Grade: 1") { return d._children ? "#4a4f4f" : "#2be2d0";}
-                    else if (d.parent.parent.name == "Grade: 2") { return d._children ? "#4a4f4f" :  "#409edd";}
-                    else if (d.parent.parent.name == "Grade: 3") { return d._children ? "#4a4f4f" :  "#3232c9";}
-                    else if (d.parent.parent.name == "Grade: 4") { return d._children ? "#4a4f4f" :  "#ae76ff";}
-                    else if (d.parent.parent.name == "Grade: 5") { return d._children ? "#4a4f4f" :  "#7228c9";}
-                    else if (d.parent.parent.name == "Grade: 6 - 8") { return d._children ? "#4a4f4f" :  "#f77e11";}
-                    else if (d.parent.parent.name == "Grade: 6") { return d._children ? "#4a4f4f" :  "#ffe566";}
-                    else if (d.parent.parent.name == "Grade: 7") { return d._children ? "#4a4f4f" :  "#f7b31c";}
-                    else if (d.parent.parent.name == "Grade: 8") { return d._children ? "#4a4f4f" :  "#e2110c";}
-                    else if (d.parent.parent.name == "Grade: 9 - 10") { return d._children ? "#4a4f4f" :  "#1c421c";}
+                    else if (d.parent.parent.name == "Grade: 1") { return d._children ? "#4a4f4f" : "#95f4e9";}
+                    else if (d.parent.parent.name == "Grade: 2") { return d._children ? "#4a4f4f" :  "#33ccd3";}
+                    else if (d.parent.parent.name == "Grade: 3") { return d._children ? "#4a4f4f" :  "#71abff";}
+                    else if (d.parent.parent.name == "Grade: 4") { return d._children ? "#4a4f4f" :  "#3232c9";}
+                    else if (d.parent.parent.name == "Grade: 5") { return d._children ? "#4a4f4f" :  "#1717a0";}
+                    else if (d.parent.parent.name == "Grade: 6 - 8") { return d._children ? "#4a4f4f" :  "#e28bf7";}
+                    else if (d.parent.parent.name == "Grade: 6") { return d._children ? "#4a4f4f" :  "#ae76ff";}
+                    else if (d.parent.parent.name == "Grade: 7") { return d._children ? "#4a4f4f" :  "#7228c9";}
+                    else if (d.parent.parent.name == "Grade: 8") { return d._children ? "#4a4f4f" :  "#c61ae5";}
+                    else if (d.parent.parent.name == "Grade: 9 - 10") { return d._children ? "#4a4f4f" :  "#a3e867";}
                     else if (d.parent.parent.name == "Grade: 11 - 12") { return d._children ? "#4a4f4f" :  "#39b54a";}
-                    else if (d.parent.parent.name == "Grade: HSN") { return d._children ? "#4a4f4f" : "#39b54a";}
-                    else if (d.parent.parent.name == "Grade: HSA") { return d._children ? "#4a4f4f" : "#106b10";}
-                    else if (d.parent.parent.name == "Grade: HSF") { return d._children ? "#4a4f4f" : "#a3e867";}
-                    else if (d.parent.parent.name == "Grade: HSG") { return d._children ? "#4a4f4f" : "#1c421c";}
-                    else if (d.parent.parent.name == "Grade: HSS") { return d._children ? "#4a4f4f" : "#0f8476";}                
+                    else if (d.parent.parent.name == "Grade: HSN") { return d._children ? "#4a4f4f" : "#a3e867";}
+                    else if (d.parent.parent.name == "Grade: HSA") { return d._children ? "#4a4f4f" : "#39b54a";}
+                    else if (d.parent.parent.name == "Grade: HSF") { return d._children ? "#4a4f4f" : "#1fa087";}
+                    else if (d.parent.parent.name == "Grade: HSG") { return d._children ? "#4a4f4f" : "#1b6d20";}
+                    else if (d.parent.parent.name == "Grade: HSS") { return d._children ? "#4a4f4f" : "#1a511a";}                
                 } else if (d.standardText) {
                     if(d.parent.parent.parent.name == "Grade: K") { return "#6edff9";}
-                    else if (d.parent.parent.parent.name == "Grade: 1") { return "#2be2d0";}
-                    else if (d.parent.parent.parent.name == "Grade: 2") { return "#409edd";}
-                    else if (d.parent.parent.parent.name == "Grade: 3") { return "#3232c9";}
-                    else if (d.parent.parent.parent.name == "Grade: 4") { return "#ae76ff";}
-                    else if (d.parent.parent.parent.name == "Grade: 5") { return "#7228c9";}
-                    else if (d.parent.parent.parent.name == "Grade: 6 - 8") { return "#f77e11";}
-                    else if (d.parent.parent.parent.name == "Grade: 6") { return "#ffe566";}
-                    else if (d.parent.parent.parent.name == "Grade: 7") { return "#f7b31c";}
-                    else if (d.parent.parent.parent.name == "Grade: 8") { return "#e2110c";}
-                    else if (d.parent.parent.parent.name == "Grade: 9 - 10") { return "#1c421c";}
+                    else if (d.parent.parent.parent.name == "Grade: 1") { return "#95f4e9";}
+                    else if (d.parent.parent.parent.name == "Grade: 2") { return "#33ccd3";}
+                    else if (d.parent.parent.parent.name == "Grade: 3") { return "#71abff";}
+                    else if (d.parent.parent.parent.name == "Grade: 4") { return "#3232c9";}
+                    else if (d.parent.parent.parent.name == "Grade: 5") { return "#1717a0";}
+                    else if (d.parent.parent.parent.name == "Grade: 6 - 8") { return "#e28bf7";}
+                    else if (d.parent.parent.parent.name == "Grade: 6") { return "#ae76ff";}
+                    else if (d.parent.parent.parent.name == "Grade: 7") { return "#7228c9";}
+                    else if (d.parent.parent.parent.name == "Grade: 8") { return "#c61ae5";}
+                    else if (d.parent.parent.parent.name == "Grade: 9 - 10") { return "#a3e867";}
                     else if (d.parent.parent.parent.name == "Grade: 11 - 12") { return "#39b54a";}
-                    else if (d.parent.parent.parent.name == "Grade: HSN") { return "#39b54a";}
-                    else if (d.parent.parent.parent.name == "Grade: HSA") { return "#106b10";}
-                    else if (d.parent.parent.parent.name == "Grade: HSF") { return "#a3e867";}
-                    else if (d.parent.parent.parent.name == "Grade: HSG") { return "#1c421c";}
-                    else if (d.parent.parent.parent.name == "Grade: HSS") { return "#0f8476";}                
+                    else if (d.parent.parent.parent.name == "Grade: HSN") { return "#a3e867";}
+                    else if (d.parent.parent.parent.name == "Grade: HSA") { return "#39b54a";}
+                    else if (d.parent.parent.parent.name == "Grade: HSF") { return "#1fa087";}
+                    else if (d.parent.parent.parent.name == "Grade: HSG") { return "#1b6d20";}
+                    else if (d.parent.parent.parent.name == "Grade: HSS") { return "#1a511a";}                
                 } else {
                     return "#4a4f4f";
                 }
