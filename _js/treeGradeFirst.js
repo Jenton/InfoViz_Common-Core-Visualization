@@ -229,6 +229,8 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
         
         d = toggleChildren(d);
 
+        //console.log($(".nodeCircle").find("tspan").text());
+
         update(d);
         // Jenton Edit: Don't centerNode if the node has no children (standards node)
         if (d.standardText) { // only the leaf has the standardText, so this check works
@@ -382,11 +384,16 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             .on("mouseover", mouseover)
             .on("mouseout", mouseout);
 
+            console.log(source);
         nodeEnter.append("circle")
             .attr('class', 'nodeCircle')
             .attr("r", 0)
             .style("fill", function(d) {
-                return d._children ? "lightsteelblue" : "#fff";
+                //return d._children ? "lightsteelblue" : "#fff";
+                return d._children ? d.colorNode : "#fff";
+            })
+            .style("stroke", function(d){
+                return d._children ? d.colorNode : d.colorNode;
             });
 
         // Jenton Edit: I changed the -10 : 10 ternary operator to -20 : 20 to make the text labels farther from the circles
@@ -482,7 +489,8 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             .attr("r", 15) // Jenton Edit: Changes area of circle
             //.attr("r", 4.5)
             .style("fill", function(d) {
-                return d._children ? "lightsteelblue" : "#fff";
+                //return d._children ? "lightsteelblue" : "#fff";
+                return d._children ? d.colorNode : "#fff";
             });
 
         // Transition nodes to their new position.

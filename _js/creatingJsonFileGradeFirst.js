@@ -25,7 +25,12 @@ data.forEach(function(d){
         // Add a branch if it isn't there
         //console.log("isNaN(index) " + isNaN(index));
         if ( isNaN(index) ) {
-            depthCursor.push({ name : d[property], type: property, children : []});
+            var color = "lightsteelblue";
+            if (d[property] == "Grade: K") {
+                color = "#9ffffa";
+            }
+            depthCursor.push({ name : d[property], type : property, colorNode : color, children : []});
+            //depthCursor.push({ name : d[property], type: property, children : []});
             index = depthCursor.length - 1;
         }
         // Now reference the new child array as we go deeper into the tree
