@@ -289,28 +289,21 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             centerNode(d);
             
             //getting the parent index
-            console.log(d.parent);
             var subjectKey;
             var key;
             //getting the index for the current depth and using that to populate the appropriate fields in the filter
             d.parent.children.forEach(function(data, index){
-                console.log("data name: " + data.name);
-                console.log("d.name: " + d.name);
                 if (data.name == d.name){
                     key = parseInt(index);
                 }
             })
             d.parent.parent.children.forEach(function(data, index){
-                console.log("data name: " + data.name);
-                console.log("d.name: " + d.name);
                 if (data.name == d.parent.name){
                     subjectKey = parseInt(index);
                 }    
             })
-                console.log("subjectKey: " + subjectKey);
-                console.log("key: " + key);
                 populateDomains(subjectKey, key);
-                console.log(d.name.toLowerCase());
+
                 $("#subjectFilter").find('option[value="' + d.parent.name + '"]').attr("selected", true);
                 $("#gradeFilter").find('option[value="' + d.name + '"]').attr("selected", true);
 
@@ -351,7 +344,7 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             }
         };
         childCount(0, root);
-        var newHeight = d3.max(levelWidth) * 38; // jenton edit: 38 pixels per line for the height spread (default was 25)
+        var newHeight = d3.max(levelWidth) * 35; // jenton edit: 38 pixels per line for the height spread (default was 25)
         tree = tree.size([newHeight, viewerWidth]);
 
         // Compute the new tree layout.
@@ -360,11 +353,11 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
 
         // Set widths between levels based on maxLabelLength.
         nodes.forEach(function(d) {
-            //d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
+            d.y = (d.depth * (maxLabelLength *3.4)); //maxLabelLength * 10px
             // alternatively to keep a fixed scale one can set a fixed depth per level
             // Normalize for fixed-depth by commenting out below line
             //Jenton Edit: enabled the line below to create a fixed scale, for the horizontal spread
-            d.y = (d.depth * 250); //500px per level.
+            //d.y = (d.depth * 250); //250px per level.
         });
 
         // Update the nodes…
@@ -394,7 +387,7 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
 
         // Jenton Edit: I changed the -10 : 10 ternary operator to -20 : 20 to make the text labels farther from the circles
         // Jenton Edit: This code changes the placement of the text
-        /*nodeEnter.append("text")
+        nodeEnter.append("text")
             //.attr("x", function(d) { // original
             //    return d.children || d._children ? -20 : 20;
             //}) 
@@ -412,11 +405,11 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             .text(function(d) {
                 return d.name;
             })
-            .style("fill-opacity", 0);*/
+            .style("fill-opacity", 0);
 
             // Jenton Edit: Code to have two lines of text for nodes with longer text
             // Source: http://stackoverflow.com/questions/20810659/breaking-text-from-json-into-several-lines-for-displaying-labels-in-a-d3-force-l
-        var maxLength = 35;
+        /*var maxLength = 35;
         var separation = 3;
         var textX = 0;
         nodeEnter.append("text")
@@ -427,12 +420,10 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             })
             .each(function (d) {
             var lines = wordwrap2(d.name, maxLength).split('\n');
-            /*console.log(d.name);
-            console.log(lines);*/
             for (var i = 0; i < lines.length; i++) {
                 if(i == 1){
                     separation = 14;
-                }
+                } else {separation = 3;}
                 d3.select(this)
                     .append("tspan")
                     .attr("dy", separation)
@@ -441,7 +432,7 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
                     })
                     .text(lines[i]);
             }
-        });
+        });*/
 
         function wordwrap2( str, width, brk, cut ) {
             brk = brk || '\n';
@@ -468,24 +459,150 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
         // Change the circle fill depending on whether it has children and is collapsed
         // also where color is
         node.select("circle.nodeCircle")
-            .attr("r", 15) // Jenton Edit: Changes area of circle
+            .attr("r", 13) // Jenton Edit: Changes area of circle
             //.attr("r", 4.5)
             .style("fill", function(d) {
                 //return d._children ? "lightsteelblue" : "#fff";
                 console.log(d.standardText);
-                if (d.type == "cluster") { // only the leaf has the standardText, so this check works
+                if (d.type == "grade") { // only the leaf has the standardText, so this check works
+                    console.log("grade name: " + d.name);
+                    if(d.name == "Grade: K") { return d._children ? "#6edff9" : "#fff";}
+                    else if (d.name == "Grade: 1") { return d._children ? "#2be2d0" : "#fff";}
+                    else if (d.name == "Grade: 2") { return d._children ? "#409edd" : "#fff";}
+                    else if (d.name == "Grade: 3") { return d._children ? "#3232c9" : "#fff";}
+                    else if (d.name == "Grade: 4") { return d._children ? "#ae76ff" : "#fff";}
+                    else if (d.name == "Grade: 5") { return d._children ? "#7228c9" : "#fff";}
+                    else if (d.name == "Grade: 6 - 8") { return d._children ? "#f77e11" : "#fff";}
+                    else if (d.name == "Grade: 6") { return d._children ? "#ffe566" : "#fff";}
+                    else if (d.name == "Grade: 7") { return d._children ? "#f7b31c" : "#fff";}
+                    else if (d.name == "Grade: 8") { return d._children ? "#e2110c" : "#fff";}
+                    else if (d.name == "Grade: 9 - 10") { return d._children ? "#1c421c" : "#fff";}                    
+                    else if (d.name == "Grade: 11 - 12") { return d._children ? "#39b54a" : "#fff";}
+                    else if (d.name == "Grade: HSN") { return d._children ? "#39b54a" : "#fff";}
+                    else if (d.name == "Grade: HSA") { return d._children ? "#106b10" : "#fff";}
+                    else if (d.name == "Grade: HSF") { return d._children ? "#a3e867" : "#fff";}
+                    else if (d.name == "Grade: HSG") { return d._children ? "#1c421c" : "#fff";}
+                    else if (d.name == "Grade: HSS") { return d._children ? "#0f8476" : "#fff";}                
+                } else if (d.type == "domain") { // only the leaf has the standardText, so this check works
+                    console.log("domain name: " + d.parent.name);
+                    if(d.parent.name == "Grade: K") { return d._children ? "#6edff9" : "#fff";}
+                    else if (d.parent.name == "Grade: 1") { return d._children ? "#2be2d0" : "#fff";}
+                    else if (d.parent.name == "Grade: 2") { return d._children ? "#409edd" : "#fff";}
+                    else if (d.parent.name == "Grade: 3") { return d._children ? "#3232c9" : "#fff";}
+                    else if (d.parent.name == "Grade: 4") { return d._children ? "#ae76ff" : "#fff";}
+                    else if (d.parent.name == "Grade: 5") { return d._children ? "#7228c9" : "#fff";}
+                    else if (d.parent.name == "Grade: 6 - 8") { return d._children ? "#f77e11" : "#fff";}
+                    else if (d.parent.name == "Grade: 6") { return d._children ? "#ffe566" : "#fff";}
+                    else if (d.parent.name == "Grade: 7") { return d._children ? "#f7b31c" : "#fff";}
+                    else if (d.parent.name == "Grade: 8") { return d._children ? "#e2110c" : "#fff";}
+                    else if (d.parent.name == "Grade: 9 - 10") { return d._children ? "#1c421c" : "#fff";}
+                    else if (d.parent.name == "Grade: 11 - 12") { return d._children ? "#39b54a" : "#fff";}
+                    else if (d.parent.name == "Grade: HSN") { return d._children ? "#39b54a" : "#fff";}
+                    else if (d.parent.name == "Grade: HSA") { return d._children ? "#106b10" : "#fff";}
+                    else if (d.parent.name == "Grade: HSF") { return d._children ? "#a3e867" : "#fff";}
+                    else if (d.parent.name == "Grade: HSG") { return d._children ? "#1c421c" : "#fff";}
+                    else if (d.parent.name == "Grade: HSS") { return d._children ? "#0f8476" : "#fff";}                
+
+                } else if (d.type == "cluster") { // only the leaf has the standardText, so this check works
+                    console.log("grade name: " + d.parent.parent.name);
                     if(d.parent.parent.name == "Grade: K") { return d._children ? "#6edff9" : "#fff";}
-                    /*console.log(d.parent.parent.parent.name);
-                    if(d.parent.parent.parent.name == "Grade: K") { return d._children ? "#6edff9" : "#fff";}
-                    else if (d.parent.parent.parent.name == "Grade: 1") { return d._children ? "#2be2d0" : "#fff";}
-                    else if (d.parent.parent.parent.name == "Grade: 2") { return d._children ? "#409edd" : "#fff";}
-                    else if (d.parent.parent.parent.name == "Grade: 3") { return d._children ? "#3232c9" : "#fff";}
-                    else {
-                        return d._children ? "lightsteelblue" : "#fff";
-                    }*/
-                    return d._children ? "#6edff9" : "#fff";
+                    else if (d.parent.parent.name == "Grade: 1") { return d._children ? "#2be2d0" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 2") { return d._children ? "#409edd" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 3") { return d._children ? "#3232c9" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 4") { return d._children ? "#ae76ff" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 5") { return d._children ? "#7228c9" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 6 - 8") { return d._children ? "#f77e11" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 6") { return d._children ? "#ffe566" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 7") { return d._children ? "#f7b31c" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 8") { return d._children ? "#e2110c" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 9 - 10") { return d._children ? "#1c421c" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: 11 - 12") { return d._children ? "#39b54a" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: HSN") { return d._children ? "#39b54a" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: HSA") { return d._children ? "#106b10" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: HSF") { return d._children ? "#a3e867" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: HSG") { return d._children ? "#1c421c" : "#fff";}
+                    else if (d.parent.parent.name == "Grade: HSS") { return d._children ? "#0f8476" : "#fff";}                
+                   
                 } else {
                     return d._children ? "#4a4f4f" : "#fff";
+                }
+            })
+            .style("stroke", function(d){
+                if (d.type == "grade") { // only the leaf has the standardText, so this check works                    
+                    if (d.name == "Grade: K") { return d._children ? "#4a4f4f" : "#6edff9";}
+                    else if (d.name == "Grade: 1") { return d._children ? "#4a4f4f" : "#2be2d0";}
+                    else if (d.name == "Grade: 2") { return d._children ? "#4a4f4f" :  "#409edd";}
+                    else if (d.name == "Grade: 3") { return d._children ? "#4a4f4f" :  "#3232c9";}
+                    else if (d.name == "Grade: 4") { return d._children ? "#4a4f4f" :  "#ae76ff";}
+                    else if (d.name == "Grade: 5") { return d._children ? "#4a4f4f" :  "#7228c9";}
+                    else if (d.name == "Grade: 6 - 8") { return d._children ? "#4a4f4f" :  "#f77e11";}
+                    else if (d.name == "Grade: 6") { return d._children ? "#4a4f4f" :  "#ffe566";}
+                    else if (d.name == "Grade: 7") { return d._children ? "#4a4f4f" :  "#f7b31c";}
+                    else if (d.name == "Grade: 8") { return d._children ? "#4a4f4f" :  "#e2110c";}
+                    else if (d.name == "Grade: 9 - 10") { return d._children ? "#4a4f4f" :  "#1c421c";}
+                    else if (d.name == "Grade: 11 - 12") { return d._children ? "#4a4f4f" :  "#39b54a";}
+                    else if (d.name == "Grade: HSN") { return d._children ? "#4a4f4f" : "#39b54a";}
+                    else if (d.name == "Grade: HSA") { return d._children ? "#4a4f4f" : "#106b10";}
+                    else if (d.name == "Grade: HSF") { return d._children ? "#4a4f4f" : "#a3e867";}
+                    else if (d.name == "Grade: HSG") { return d._children ? "#4a4f4f" : "#1c421c";}
+                    else if (d.name == "Grade: HSS") { return d._children ? "#4a4f4f" : "#0f8476";}                
+                } else if (d.type == "domain") {    
+                    if (d.parent.name == "Grade: K") { return d._children ? "#4a4f4f" : "#6edff9";}
+                    else if (d.parent.name == "Grade: 1") { return d._children ? "#4a4f4f" : "#2be2d0";}
+                    else if (d.parent.name == "Grade: 2") { return d._children ? "#4a4f4f" :  "#409edd";}
+                    else if (d.parent.name == "Grade: 3") { return d._children ? "#4a4f4f" :  "#3232c9";}
+                    else if (d.parent.name == "Grade: 4") { return d._children ? "#4a4f4f" :  "#ae76ff";}
+                    else if (d.parent.name == "Grade: 5") { return d._children ? "#4a4f4f" :  "#7228c9";}
+                    else if (d.parent.name == "Grade: 6 - 8") { return d._children ? "#4a4f4f" :  "#f77e11";}
+                    else if (d.parent.name == "Grade: 6") { return d._children ? "#4a4f4f" :  "#ffe566";}
+                    else if (d.parent.name == "Grade: 7") { return d._children ? "#4a4f4f" :  "#f7b31c";}
+                    else if (d.parent.name == "Grade: 8") { return d._children ? "#4a4f4f" :  "#e2110c";}
+                    else if (d.parent.name == "Grade: 9 - 10") { return d._children ? "#4a4f4f" :  "#1c421c";}
+                    else if (d.parent.name == "Grade: 11 - 12") { return d._children ? "#4a4f4f" :  "#39b54a";}
+                    else if (d.parent.name == "Grade: HSN") { return d._children ? "#4a4f4f" : "#39b54a";}
+                    else if (d.parent.name == "Grade: HSA") { return d._children ? "#4a4f4f" : "#106b10";}
+                    else if (d.parent.name == "Grade: HSF") { return d._children ? "#4a4f4f" : "#a3e867";}
+                    else if (d.parent.name == "Grade: HSG") { return d._children ? "#4a4f4f" : "#1c421c";}
+                    else if (d.parent.name == "Grade: HSS") { return d._children ? "#4a4f4f" : "#0f8476";}                
+
+                } else if (d.type == "cluster") { // only the leaf has the standardText, so this check works
+                    if (d.parent.parent.name == "Grade: K") { return d._children ? "#4a4f4f" : "#6edff9";}
+                    else if (d.parent.parent.name == "Grade: 1") { return d._children ? "#4a4f4f" : "#2be2d0";}
+                    else if (d.parent.parent.name == "Grade: 2") { return d._children ? "#4a4f4f" :  "#409edd";}
+                    else if (d.parent.parent.name == "Grade: 3") { return d._children ? "#4a4f4f" :  "#3232c9";}
+                    else if (d.parent.parent.name == "Grade: 4") { return d._children ? "#4a4f4f" :  "#ae76ff";}
+                    else if (d.parent.parent.name == "Grade: 5") { return d._children ? "#4a4f4f" :  "#7228c9";}
+                    else if (d.parent.parent.name == "Grade: 6 - 8") { return d._children ? "#4a4f4f" :  "#f77e11";}
+                    else if (d.parent.parent.name == "Grade: 6") { return d._children ? "#4a4f4f" :  "#ffe566";}
+                    else if (d.parent.parent.name == "Grade: 7") { return d._children ? "#4a4f4f" :  "#f7b31c";}
+                    else if (d.parent.parent.name == "Grade: 8") { return d._children ? "#4a4f4f" :  "#e2110c";}
+                    else if (d.parent.parent.name == "Grade: 9 - 10") { return d._children ? "#4a4f4f" :  "#1c421c";}
+                    else if (d.parent.parent.name == "Grade: 11 - 12") { return d._children ? "#4a4f4f" :  "#39b54a";}
+                    else if (d.parent.parent.name == "Grade: HSN") { return d._children ? "#4a4f4f" : "#39b54a";}
+                    else if (d.parent.parent.name == "Grade: HSA") { return d._children ? "#4a4f4f" : "#106b10";}
+                    else if (d.parent.parent.name == "Grade: HSF") { return d._children ? "#4a4f4f" : "#a3e867";}
+                    else if (d.parent.parent.name == "Grade: HSG") { return d._children ? "#4a4f4f" : "#1c421c";}
+                    else if (d.parent.parent.name == "Grade: HSS") { return d._children ? "#4a4f4f" : "#0f8476";}                
+                } else if (d.standardText) {
+                    if(d.parent.parent.parent.name == "Grade: K") { return "#6edff9";}
+                    else if (d.parent.parent.parent.name == "Grade: 1") { return "#2be2d0";}
+                    else if (d.parent.parent.parent.name == "Grade: 2") { return "#409edd";}
+                    else if (d.parent.parent.parent.name == "Grade: 3") { return "#3232c9";}
+                    else if (d.parent.parent.parent.name == "Grade: 4") { return "#ae76ff";}
+                    else if (d.parent.parent.parent.name == "Grade: 5") { return "#7228c9";}
+                    else if (d.parent.parent.parent.name == "Grade: 6 - 8") { return "#f77e11";}
+                    else if (d.parent.parent.parent.name == "Grade: 6") { return "#ffe566";}
+                    else if (d.parent.parent.parent.name == "Grade: 7") { return "#f7b31c";}
+                    else if (d.parent.parent.parent.name == "Grade: 8") { return "#e2110c";}
+                    else if (d.parent.parent.parent.name == "Grade: 9 - 10") { return "#1c421c";}
+                    else if (d.parent.parent.parent.name == "Grade: 11 - 12") { return "#39b54a";}
+                    else if (d.parent.parent.parent.name == "Grade: HSN") { return "#39b54a";}
+                    else if (d.parent.parent.parent.name == "Grade: HSA") { return "#106b10";}
+                    else if (d.parent.parent.parent.name == "Grade: HSF") { return "#a3e867";}
+                    else if (d.parent.parent.parent.name == "Grade: HSG") { return "#1c421c";}
+                    else if (d.parent.parent.parent.name == "Grade: HSS") { return "#0f8476";}                
+                } else {
+                    return "#4a4f4f";
                 }
             });
 
