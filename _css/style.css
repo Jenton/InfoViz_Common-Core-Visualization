@@ -212,6 +212,7 @@ svg {
 #tree-container {
   float: left;
   margin-top:5px; 
+  box-shadow: 1px 1px 1px #CCCCCC;
 }
 
 #standard-hover-div {
@@ -226,6 +227,7 @@ bottom: 10px;
 height:70px;
 padding-left:12px;
 padding-top:12px;
+box-shadow: 1px 1px 1px #CCCCCC;
 }
 
 input {
@@ -241,6 +243,7 @@ input {
   padding-top:12px;
   padding-left:12px;
   font-size: 14px;
+  box-shadow: 1px 1px 1px #CCCCCC;;
 }
 
 h1 {
