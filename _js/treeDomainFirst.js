@@ -639,7 +639,7 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
     console.log("svg width: " + $("svg").width());
     $(function() {
         $( "#standard-hover-div")
-        .width($("svg").width())
+        .width($("svg").width()-12)
         .height(viewerHeight/7)
         
     });
@@ -647,7 +647,7 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
     // Jenton Edit: setting the breadcrumb div's height and width
     $(function() {
         $( "#breadcrumb")
-        .width($("svg").width())
+        .width($("svg").width()-12)
         .html(root.children[0].name);
         //.height(viewerHeight/8)
     });
