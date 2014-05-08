@@ -390,6 +390,12 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             .attr("r", 0)
             .style("fill", function(d) {
                 //return d._children ? "lightsteelblue" : "#fff";
+                if (d.standardText) { // only the leaf has the standardText, so this check works
+                    if(d.parent.parent.parent.name == "Grade: K") { return d._children ? "#" : "#fff";}
+                    else if (d.parent.parent.parent.name == "Grade: K") { return d._children ? d.colorNode : "#fff";})
+                    } + " > " + d.parent.parent.name + " > " + d.parent.name + " > " + d.name);
+            centerNode(d);
+        } else if (d.type == "cluster") {
                 return d._children ? d.colorNode : "#fff";
             })
             .style("stroke", function(d){
