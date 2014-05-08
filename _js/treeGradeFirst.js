@@ -389,17 +389,7 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             .attr('class', 'nodeCircle')
             .attr("r", 0)
             .style("fill", function(d) {
-                //return d._children ? "lightsteelblue" : "#fff";
-                if (d.standardText) { // only the leaf has the standardText, so this check works
-                    if(d.parent.parent.parent.name == "Grade: K") { return d._children ? "#" : "#fff";}
-                    else if (d.parent.parent.parent.name == "Grade: K") { return d._children ? d.colorNode : "#fff";})
-                    } + " > " + d.parent.parent.name + " > " + d.parent.name + " > " + d.name);
-            centerNode(d);
-        } else if (d.type == "cluster") {
-                return d._children ? d.colorNode : "#fff";
-            })
-            .style("stroke", function(d){
-                return d._children ? d.colorNode : d.colorNode;
+                return d._children ? "lightsteelblue" : "#fff";
             });
 
         // Jenton Edit: I changed the -10 : 10 ternary operator to -20 : 20 to make the text labels farther from the circles
@@ -462,20 +452,6 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             return str.match( RegExp(regex, 'g') ).join( brk );
         }
 
-        // phantom node to give us mouseover in a radius around it
-        /*nodeEnter.append("circle")
-            .attr('class', 'ghostCircle')
-            .attr("r", 30)
-            .attr("opacity", 0.2) // change this to zero to hide the target area
-        .style("fill", "red")
-            .attr('pointer-events', 'mouseover')
-            .on("mouseover", function(node) {
-                overCircle(node);
-            })
-            .on("mouseout", function(node) {
-                outCircle(node);
-            });*/
-
         // Update the text to reflect whether node has children or not.
         // Jenton Edit: I changed the -10 : 10 ternary operator to -20 : 20 to make the text labels farther from the circles
   /*      node.select('text')
@@ -496,7 +472,21 @@ treeJSON = d3.text("./_data/flareGradeFirst.txt", function(error, treeData) {
             //.attr("r", 4.5)
             .style("fill", function(d) {
                 //return d._children ? "lightsteelblue" : "#fff";
-                return d._children ? d.colorNode : "#fff";
+                console.log(d.standardText);
+                if (d.type == "cluster") { // only the leaf has the standardText, so this check works
+                    if(d.parent.parent.name == "Grade: K") { return d._children ? "#6edff9" : "#fff";}
+                    /*console.log(d.parent.parent.parent.name);
+                    if(d.parent.parent.parent.name == "Grade: K") { return d._children ? "#6edff9" : "#fff";}
+                    else if (d.parent.parent.parent.name == "Grade: 1") { return d._children ? "#2be2d0" : "#fff";}
+                    else if (d.parent.parent.parent.name == "Grade: 2") { return d._children ? "#409edd" : "#fff";}
+                    else if (d.parent.parent.parent.name == "Grade: 3") { return d._children ? "#3232c9" : "#fff";}
+                    else {
+                        return d._children ? "lightsteelblue" : "#fff";
+                    }*/
+                    return d._children ? "#6edff9" : "#fff";
+                } else {
+                    return d._children ? "#4a4f4f" : "#fff";
+                }
             });
 
         // Transition nodes to their new position.
