@@ -393,7 +393,7 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
 
         // Jenton Edit: I changed the -10 : 10 ternary operator to -20 : 20 to make the text labels farther from the circles
         // Jenton Edit: This code changes the placement of the text
-        /*nodeEnter.append("text")
+        nodeEnter.append("text")
             //.attr("x", function(d) { // original
             //    return d.children || d._children ? -20 : 20;
             //}) 
@@ -411,7 +411,7 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
             .text(function(d) {
                 return d.name;
             })
-            .style("fill-opacity", 0);*/
+            .style("fill-opacity", 0);
 
             // Jenton Edit: Code to have two lines of text for nodes with longer text
             // Source: http://stackoverflow.com/questions/20810659/breaking-text-from-json-into-several-lines-for-displaying-labels-in-a-d3-force-l
