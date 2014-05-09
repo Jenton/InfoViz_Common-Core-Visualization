@@ -360,11 +360,11 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
 
         // Set widths between levels based on maxLabelLength.
         nodes.forEach(function(d) {
-            //d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
+            d.y = (d.depth * (maxLabelLength * 3.4)); //maxLabelLength * 10px
             // alternatively to keep a fixed scale one can set a fixed depth per level
             // Normalize for fixed-depth by commenting out below line
             //Jenton Edit: enabled the line below to create a fixed scale, for the horizontal spread
-            d.y = (d.depth * 250); //500px per level.
+            //d.y = (d.depth * 250); //500px per level.
         });
 
         // Update the nodes…
@@ -415,7 +415,7 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
 
             // Jenton Edit: Code to have two lines of text for nodes with longer text
             // Source: http://stackoverflow.com/questions/20810659/breaking-text-from-json-into-several-lines-for-displaying-labels-in-a-d3-force-l
-        var maxLength = 35;
+        /*var maxLength = 35;
         var separation = 3;
         var textX = 0;
         nodeEnter.append("text")
@@ -426,8 +426,8 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
             })
             .each(function (d) {
             var lines = wordwrap2(d.name, maxLength).split('\n');
-            /*console.log(d.name);
-            console.log(lines);*/
+            console.log(d.name);
+            console.log(lines);
             for (var i = 0; i < lines.length; i++) {
                 if(i == 1){
                     separation = 14;
@@ -440,7 +440,7 @@ treeJSON = d3.text("./_data/flareDomainFirst.txt", function(error, treeData) {
                     })
                     .text(lines[i]);
             }
-        });
+        });*/
 
         function wordwrap2( str, width, brk, cut ) {
             brk = brk || '\n';
